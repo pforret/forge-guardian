@@ -1,0 +1,10 @@
+# Forge Guardian — Server List
+# One server per line (IP address or hostname)
+# Lines starting with # are comments
+
+# Production
+142.93.1.100
+167.99.2.200
+
+# Staging
+# 64.225.3.50
