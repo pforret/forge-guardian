@@ -1,10 +1,10 @@
-# 🛡 Forge Guardian
+# Forge Guardian
 
 **Hack detection & auto-healing for Laravel Forge servers.**
 
 ![](logo-forge-guardian.png)
 
-Catches injected `cache.php` backdoors, obfuscated shells, tampered files, and suspicious cron jobs — then quarantines them and restores your repo to a clean state. Built for DigitalOcean + Laravel Forge, works on any server with git-managed Laravel projects.
+Catches injected `cache.php` backdoors, obfuscated shells, tampered files, suspicious cron jobs, and rogue processes — then quarantines them and restores your repo to a clean state. Built for DigitalOcean + Laravel Forge, works on any server with git-managed Laravel projects.
 
 ---
 
@@ -14,16 +14,20 @@ Laravel Forge servers are a common target. Attackers inject files like `cache.ph
 
 ## The Solution
 
-Forge Guardian runs every 5 minutes via cron and checks:
+Forge Guardian runs every 5 minutes via cron and performs **8 detection checks**:
 
-| Detector                 | What it catches                                                                             |
-|--------------------------|---------------------------------------------------------------------------------------------|
-| **Git status**           | Any untracked file not in `.gitignore` or the allowlist — the #1 sign of injected backdoors |
-| **Webroot scan**         | `.php` files in `public/` that aren't `index.php`                                           |
-| **Malicious signatures** | `eval(base64_decode(`, `shell_exec($`, obfuscated hex, `$_REQUEST` injections, etc.         |
-| **Recent changes**       | PHP files modified in the last 10 minutes containing malicious code                         |
-| **Suspicious crons**     | Cron entries with `curl` pipes, `wget`, reverse shells                                      |
-| **Bad permissions**      | World-writable directories, loose `.env` permissions                                        |
+| Detector                     | What it catches                                                                             |
+|------------------------------|---------------------------------------------------------------------------------------------|
+| **Git anomalies**            | Untracked files not in `.gitignore`/allowlist, and tracked files with injected malicious code |
+| **Webroot injections**       | `.php` files in `public/` that aren't `index.php`                                           |
+| **Storage PHP files**        | `.php` files in `storage/` (excluding compiled Blade views)                                 |
+| **Malicious signatures**     | `eval(base64_decode(`, `shell_exec($`, obfuscated hex, `$_REQUEST` injections, `create_function`, `file_put_contents` with user input, etc. |
+| **Recent file changes**      | PHP files modified in the last 10 minutes that contain malicious code                       |
+| **Suspicious cron jobs**     | Cron entries containing `curl`, `wget`, `python`, `perl`, `nc`, reverse shells, or references to `/var/tmp`, `/dev/shm` |
+| **Suspicious processes**     | Running processes executing from `/var/tmp/`, `/dev/shm/`, or `/tmp/` (common malware staging areas) |
+| **Bad permissions**          | World-writable directories in `public/`, `.env` files with loose permissions                |
+
+Additionally, **temp directory cleanup** removes forge-owned files from `/var/tmp` and `/dev/shm` that shouldn't be there.
 
 When threats are found, it can **auto-heal** — quarantine malicious files (preserved for forensics) and `git checkout` tampered tracked files back to their clean state.
 
@@ -31,62 +35,53 @@ When threats are found, it can **auto-heal** — quarantine malicious files (pre
 
 ## Quick Start
 
-### One-liner install (on the server)
+### Install on a server (git clone)
 
 ```bash
-curl -sL https://raw.githubusercontent.com/YOUR_USER/forge-guardian/main/install.sh | sudo bash
+sudo git clone https://github.com/pforret/forge-guardian.git /opt/forge-guardian
+sudo /opt/forge-guardian/forge-guardian.sh install
 ```
 
-This auto-detects all Laravel projects in `/home/forge/`, installs the script, and runs an initial scan.
+This clones the repo, auto-detects all Laravel projects in `/home/forge/`, sets up the cron job + log rotation, and runs an initial dry-run scan.
 
 ### Remote deploy (from your local machine)
 
-Deploy to multiple servers at once over SSH without logging into each one:
+Deploy to multiple servers at once over SSH. The script will `git clone` the repo on each server:
 
 ```bash
-git clone https://github.com/YOUR_USER/forge-guardian.git
+git clone https://github.com/pforret/forge-guardian.git
 cd forge-guardian
 
 # Single server
-./deploy-remote.sh 142.93.1.100
+./forge-guardian.sh deploy -s 142.93.1.100
 
-# Multiple servers with Slack alerts and auto-heal
-./deploy-remote.sh \
-    --servers examples/servers.txt \
-    --slack "https://hooks.slack.com/services/T00/B00/xxx" \
-    --mode auto-heal \
-    142.93.1.100 167.99.2.200
+# Multiple servers
+./forge-guardian.sh deploy -s 142.93.1.100 -s 167.99.2.200
 
-# Custom SSH key (typical for Forge)
-./deploy-remote.sh --key ~/.ssh/forge_rsa 142.93.1.100
+# From a server list file
+./forge-guardian.sh deploy --SERVERLIST servers.txt
+
+# With Slack alerts and auto-heal mode
+./forge-guardian.sh deploy --SLACK "https://hooks.slack.com/services/T00/B00/xxx" --MODE heal -s 142.93.1.100
 ```
 
 The remote deployer will:
 1. SSH into each server
-2. Upload `forge-guardian.sh`
+2. `git clone` the forge-guardian repo to `/opt/forge-guardian/`
 3. Auto-detect all git-based Laravel projects in `/home/forge/`
-4. Configure your notification webhooks
-5. Install the cron job + log rotation
-6. Run an initial dry-run scan so you see results immediately
+4. Install the cron job + log rotation
+5. Run an initial dry-run scan so you see results immediately
 
-### Manual install
+### Update (git pull)
+
+Since the installation is a git clone, updating is simple:
 
 ```bash
-sudo mkdir -p /opt/forge-guardian
-sudo curl -fsSL https://raw.githubusercontent.com/YOUR_USER/forge-guardian/main/forge-guardian.sh \
-    -o /opt/forge-guardian/forge-guardian.sh
-sudo chmod +x /opt/forge-guardian/forge-guardian.sh
+# Update locally
+./forge-guardian.sh update
 
-# Edit config — set your project directories and notifications
-sudo nano /opt/forge-guardian/forge-guardian.sh
-
-# Test
-sudo /opt/forge-guardian/forge-guardian.sh --dry-run --verbose
-
-# Add to cron (every 5 minutes)
-(sudo crontab -l 2>/dev/null | grep -v forge-guardian; \
- echo '*/5 * * * * /opt/forge-guardian/forge-guardian.sh --auto-heal >> /var/log/forge-guardian.log 2>&1') \
- | sudo crontab -
+# Update remote servers
+./forge-guardian.sh update -s 142.93.1.100 -s 167.99.2.200
 ```
 
 ---
@@ -94,46 +89,120 @@ sudo /opt/forge-guardian/forge-guardian.sh --dry-run --verbose
 ## Usage
 
 ```
-forge-guardian.sh [FLAGS]
+forge-guardian.sh [OPTIONS] <action>
+
+ACTIONS:
+    scan        Scan all Forge projects for threats
+    install     Install on this server (cron + logrotate)
+    deploy      Deploy to remote servers via SSH (git clone)
+    update      Update to the latest version (git pull)
+    uninstall   Remove Forge Guardian from this server
+    check       Show current configuration
+    env         Generate an example .env file
 
 FLAGS:
-    --dry-run       Report what would happen, take no action
-    --auto-heal     Quarantine malicious files, git-restore tampered ones
-    --verbose       Extra debug output
-    (no flags)      Detect and report only
+    -h|--help       Show usage
+    -Q|--QUIET      No output
+    -V|--VERBOSE    Show debug messages
+    -f|--FORCE      Do not ask for confirmation
+
+OPTIONS:
+    -m|--MODE <mode>          Scan mode: detect (default), heal, or dryrun
+    -s|--SERVER <host>        Server to operate on (repeatable)
+    -S|--SERVERLIST <file>    File with server list (one per line)
+    -r|--ROOT <path>          Root folder for Forge projects (default: /home/forge)
+    -q|--QUARANTINE <path>    Quarantine directory (default: /opt/forge-guardian/quarantine)
+    -i|--INTERVAL <min>       Cron interval in minutes (default: 5)
+    -w|--SLACK <url>          Slack webhook URL
+    -D|--DISCORD <url>        Discord webhook URL
+    -G|--TELEGRAM <token:id>  Telegram bot token and chat ID
+    -e|--EMAIL <address>      Notification email address
+```
+
+### Scan Modes
+
+| Mode       | Behavior                                                        |
+|------------|-----------------------------------------------------------------|
+| `detect`   | Report threats only (default)                                   |
+| `heal`     | Quarantine malicious files, `git checkout` tampered tracked files |
+| `dryrun`   | Preview what heal would do, without taking action               |
+
+```bash
+# Detect only (default)
+forge-guardian.sh scan
+
+# Auto-heal
+forge-guardian.sh --MODE heal scan
+
+# Preview what heal would do
+forge-guardian.sh --MODE dryrun scan
+
+# Scan remote servers
+forge-guardian.sh -s 142.93.1.100 -s 167.99.2.200 scan
 ```
 
 ### Auto-Heal Behavior
 
 | File type | Action |
 |---|---|
-| Untracked malicious file | Moved to `/opt/forge-guardian/quarantine/<run_id>/` |
+| Untracked malicious file | Moved to quarantine directory |
 | Tampered tracked file | Backed up to quarantine, then restored via `git checkout` |
+| Suspicious cron entries | Forge crontab removed (heal mode) |
+| Suspicious processes | Killed (heal mode) |
+| Forge-owned temp files | Removed from `/var/tmp` and `/dev/shm` |
 
-Nothing is permanently deleted by default. Set `HEAL_MODE="delete"` in the config to skip quarantine.
+Nothing is permanently deleted — malicious files are preserved in the quarantine directory for forensic review.
 
 ---
 
-## Remote Deploy Options
+## Configuration
+
+Settings can be provided via CLI options, `.env` files, or both. The script loads `.env` files automatically from the script directory and current directory.
+
+### .env file
+
+Create `/opt/forge-guardian/.env` (or use `forge-guardian.sh env > .env` as a starting point):
+
+```bash
+# Scan settings
+MODE=detect
+ROOT=/home/forge
+QUARANTINE=/opt/forge-guardian/quarantine
+INTERVAL=5
+
+# Notifications (set any combination)
+SLACK="https://hooks.slack.com/services/T00/B00/xxx"
+DISCORD="https://discord.com/api/webhooks/xxx"
+TELEGRAM="123456789:ABCdef:987654321"
+EMAIL="admin@example.com"
+```
+
+### Suspicious Filename Patterns
+
+The script checks for filenames matching these regex patterns (built-in):
 
 ```
-deploy-remote.sh [OPTIONS] server1 server2 ...
-
-OPTIONS:
-    --user <user>              SSH user (default: root)
-    --key <path>               SSH private key (default: ~/.ssh/id_rsa)
-    --port <port>              SSH port (default: 22)
-    --servers <file>           File with one server per line
-    --projects <dirs>          Comma-separated project dirs (default: auto-detect)
-    --slack <url>              Slack webhook URL
-    --discord <url>            Discord webhook URL
-    --telegram <token:chatid>  Telegram bot token and chat ID
-    --email <address>          Email notifications (requires mailutils)
-    --mode <mode>              "detect-only" (default) or "auto-heal"
-    --interval <min>           Cron interval in minutes (default: 5)
-    --uninstall                Remove Forge Guardian from target servers
-    --dry-run                  Preview without executing
+cache[0-9]*.php, config[0-9]*.php, session[0-9]*.php,
+upload[0-9]*.php, debug.php, test.php, cmd.php, shell.php,
+wp-*.php, xmlrpc.php, adminer.php, .php.suspected,
+[hex-string].php (e.g. a1b2c3d4e5f6.php)
 ```
+
+### Malicious Code Signatures
+
+The script scans PHP file contents for these patterns (built-in):
+
+- `eval(base64_decode(`, `eval(gzinflate(`, `eval(str_rot13(`, `eval(gzuncompress(`
+- `eval($_`, `assert($_` — direct execution of user input
+- `preg_replace` with `/e` modifier (code execution)
+- `create_function(` — dynamic function creation
+- `$_REQUEST[`, `$_GET[..](`, `$_POST[..](` — direct request variable execution
+- `passthru(`, `shell_exec(`, `system($`, `exec($_` — command execution
+- `base64_decode($_` — decoding user input
+- Obfuscated hex sequences (`\x41\x42\x43...`)
+- Chained `chr()` calls (character-by-character obfuscation)
+- `file_put_contents` with `$_GET`/`$_POST`/`$_REQUEST`
+- `move_uploaded_file` — file upload handling
 
 ---
 
@@ -141,67 +210,12 @@ OPTIONS:
 
 Configure any combination — alerts only fire when threats are found.
 
-| Channel | Config variable | Setup |
-|---|---|---|
-| **Slack** | `SLACK_WEBHOOK_URL` | [Create incoming webhook](https://api.slack.com/messaging/webhooks) |
-| **Discord** | `DISCORD_WEBHOOK_URL` | Server Settings → Integrations → Webhooks |
-| **Telegram** | `TELEGRAM_BOT_TOKEN` + `TELEGRAM_CHAT_ID` | [@BotFather](https://t.me/botfather) |
-| **Email** | `NOTIFICATION_EMAIL` | Requires `mailutils` installed on server |
-
-When deploying remotely, pass these via flags:
-```bash
-./deploy-remote.sh --slack "https://hooks.slack.com/..." 142.93.1.100
-```
-
----
-
-## Configuration
-
-The top of `forge-guardian.sh` contains all configurable options:
-
-```bash
-# Project directories to monitor
-PROJECT_DIRS=(
-    "/home/forge/example.com"
-    "/home/forge/another-site.com"
-)
-
-# Paths that are OK to be untracked (beyond .gitignore)
-ALLOWLIST=(
-    "storage/framework/cache/*"
-    "storage/framework/sessions/*"
-    "storage/logs/*"
-    "vendor/*"
-    "node_modules/*"
-    # ... etc
-)
-
-# Heal mode: "quarantine" (default, keeps files) or "delete"
-HEAL_MODE="quarantine"
-```
-
-### Adding Custom Suspicious Patterns
-
-```bash
-SUSPICIOUS_PATTERNS=(
-    'cache[0-9]*\.php'     # cache1.php, cache23.php
-    'wp-.*\.php'           # WordPress-style backdoors
-    'shell\.php'
-    # Add your own:
-    'backdoor\.php'
-)
-```
-
-### Adding Custom Malicious Signatures
-
-```bash
-MALICIOUS_SIGNATURES=(
-    'eval\s*(\s*base64_decode'
-    'shell_exec\s*('
-    # Add your own:
-    'some_known_malware_string'
-)
-```
+| Channel      | Option                   | Setup |
+|--------------|--------------------------|-------|
+| **Slack**    | `--SLACK <url>`          | [Create incoming webhook](https://api.slack.com/messaging/webhooks) |
+| **Discord**  | `--DISCORD <url>`        | Server Settings > Integrations > Webhooks |
+| **Telegram** | `--TELEGRAM <token:id>`  | [@BotFather](https://t.me/botfather) — format: `bot_token:chat_id` |
+| **Email**    | `--EMAIL <address>`      | Requires `mail` command installed on server |
 
 ---
 
@@ -211,7 +225,7 @@ If you're getting hacked repeatedly, Forge Guardian is a safety net — but you 
 
 ### 1. Disable dangerous PHP functions
 
-Add to your `php.ini` (or via Forge → Server → PHP Settings):
+Add to your `php.ini` (or via Forge > Server > PHP Settings):
 
 ```ini
 disable_functions = exec,passthru,shell_exec,system,proc_open,popen
@@ -239,7 +253,7 @@ sudo chmod 600 /home/forge/example.com/.env
 
 ### 3. Block dotfiles and PHP in uploads via Nginx
 
-Add to your Nginx server block (Forge → Site → Nginx Config):
+Add to your Nginx server block (Forge > Site > Nginx Config):
 
 ```nginx
 # Block access to dotfiles
@@ -265,7 +279,7 @@ cat /home/forge/.ssh/authorized_keys
 
 ### 5. Audit Forge deploy scripts
 
-Check Forge → Site → Deploy Script for any injected commands (curl pipes, wget, etc).
+Check Forge > Site > Deploy Script for any injected commands (curl pipes, wget, etc).
 
 ### 6. Keep everything updated
 
@@ -286,7 +300,7 @@ APP_ENV=production
 
 ## Log Rotation
 
-Installed automatically by the remote deployer and one-liner installer. For manual installs, add to `/etc/logrotate.d/forge-guardian`:
+Installed automatically by `forge-guardian.sh install`. For manual setup, add to `/etc/logrotate.d/forge-guardian`:
 
 ```
 /var/log/forge-guardian.log {
@@ -304,13 +318,23 @@ Installed automatically by the remote deployer and one-liner installer. For manu
 
 ```
 forge-guardian/
-├── forge-guardian.sh     # Main detection & healing script (runs on server)
-├── deploy-remote.sh      # Deploy to servers over SSH (runs locally)
-├── install.sh            # One-liner curl installer (runs on server)
-├── examples/
-│   └── servers.txt       # Example servers list file
+├── forge-guardian.sh     # Main script (detection, healing, deploy, install)
+├── .env                  # Local configuration (not in git)
+├── VERSION.md            # Version number
 ├── LICENSE
 └── README.md
+```
+
+On installed servers (`/opt/forge-guardian/`):
+
+```
+/opt/forge-guardian/
+├── .git/                 # Git repo (enables updates via git pull)
+├── forge-guardian.sh     # Main script
+├── .env                  # Server-specific configuration
+├── quarantine/           # Quarantined malicious files
+│   └── <run_id>/         # One folder per scan run
+└── ...
 ```
 
 ---
@@ -318,20 +342,13 @@ forge-guardian/
 ## Uninstall
 
 ```bash
-# Via remote deployer
-./deploy-remote.sh --uninstall 142.93.1.100
+# Remote
+./forge-guardian.sh uninstall -s 142.93.1.100
 
-# Or manually on the server
-(sudo crontab -l | grep -v forge-guardian) | sudo crontab -
-sudo rm -rf /opt/forge-guardian
-sudo rm -f /etc/logrotate.d/forge-guardian
-# Log preserved at /var/log/forge-guardian.log
+# Or on the server directly
+sudo /opt/forge-guardian/forge-guardian.sh uninstall
 ```
 
 Quarantined files are preserved during uninstall for forensic review.
+Log file preserved at `/var/log/forge-guardian.log`.
 
----
-
-## License
-
-MIT — see [LICENSE](LICENSE).
