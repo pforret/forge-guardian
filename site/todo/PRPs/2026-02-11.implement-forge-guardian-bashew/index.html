@@ -1,0 +1,2179 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="forge-guardian Docs by pforret">
+      
+      
+      
+        <link rel="canonical" href="http://forge-guardian.test/todo/PRPs/2026-02-11.implement-forge-guardian-bashew/">
+      
+      
+        <link rel="prev" href="../../../about/features/plugins/">
+      
+      
+      
+      <link rel="icon" href="../../../icon/android-chrome-192x192.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.49">
+    
+    
+      
+        <title>PRP: Implement Forge Guardian in Bashew Framework - forge-guardian Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.6f8fc17f.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Nunito";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="red" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#prp-implement-forge-guardian-in-bashew-framework" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="forge-guardian Docs" class="md-header__button md-logo" aria-label="forge-guardian Docs" data-md-component="logo">
+      
+  <img src="../../../icon/android-chrome-192x192.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            forge-guardian Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              PRP: Implement Forge Guardian in Bashew Framework
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+    
+  
+  🛡 Forge Guardian
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../about/" class="md-tabs__link">
+          
+  
+  About
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="./" class="md-tabs__link">
+          
+  
+  Todo
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="forge-guardian Docs" class="md-nav__button md-logo" aria-label="forge-guardian Docs" data-md-component="logo">
+      
+  <img src="../../../icon/android-chrome-192x192.png" alt="logo">
+
+    </a>
+    forge-guardian Docs
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    🛡 Forge Guardian
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    About
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            About
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../about/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    About this site
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Features
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            Features
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../about/features/extensions/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Markdown Extensions
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../about/features/plugins/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Installed plugins
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Todo
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Todo
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3_1" id="__nav_3_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    PRPs
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            PRPs
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    PRP: Implement Forge Guardian in Bashew Framework
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    PRP: Implement Forge Guardian in Bashew Framework
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#goal" class="md-nav__link">
+    <span class="md-ellipsis">
+      Goal
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what" class="md-nav__link">
+    <span class="md-ellipsis">
+      What
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="What">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#user-visible-behavior" class="md-nav__link">
+    <span class="md-ellipsis">
+      User-visible behavior
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#success-criteria" class="md-nav__link">
+    <span class="md-ellipsis">
+      Success Criteria
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#all-needed-context" class="md-nav__link">
+    <span class="md-ellipsis">
+      All Needed Context
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="All Needed Context">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#documentation-references" class="md-nav__link">
+    <span class="md-ellipsis">
+      Documentation &amp; References
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#current-codebase-tree" class="md-nav__link">
+    <span class="md-ellipsis">
+      Current Codebase Tree
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#desired-codebase-tree" class="md-nav__link">
+    <span class="md-ellipsis">
+      Desired Codebase Tree
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#known-gotchas-framework-quirks" class="md-nav__link">
+    <span class="md-ellipsis">
+      Known Gotchas &amp; Framework Quirks
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#implementation-blueprint" class="md-nav__link">
+    <span class="md-ellipsis">
+      Implementation Blueprint
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Implementation Blueprint">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#optionconfig-design" class="md-nav__link">
+    <span class="md-ellipsis">
+      Option:config() Design
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#envexample-design" class="md-nav__link">
+    <span class="md-ellipsis">
+      .env.example Design
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#constant-data-embedded-in-script" class="md-nav__link">
+    <span class="md-ellipsis">
+      Constant Data (embedded in script)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scriptmain-dispatch" class="md-nav__link">
+    <span class="md-ellipsis">
+      Script:main() Dispatch
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#task-list-in-execution-order" class="md-nav__link">
+    <span class="md-ellipsis">
+      Task List (in execution order)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Task List (in execution order)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#task-1-update-script-metadata-and-optionconfig" class="md-nav__link">
+    <span class="md-ellipsis">
+      Task 1: Update script metadata and Option:config()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-2-define-constant-arrays-scan-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Task 2: Define constant arrays (scan patterns)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-3-implement-scan-helper-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Task 3: Implement scan helper functions
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-4-implement-detection-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Task 4: Implement detection functions
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-5-implement-notification-function" class="md-nav__link">
+    <span class="md-ellipsis">
+      Task 5: Implement notification function
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-6-implement-do_scan" class="md-nav__link">
+    <span class="md-ellipsis">
+      Task 6: Implement do_scan()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-7-implement-do_install" class="md-nav__link">
+    <span class="md-ellipsis">
+      Task 7: Implement do_install()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-8-implement-do_deploy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Task 8: Implement do_deploy()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-9-implement-do_uninstall" class="md-nav__link">
+    <span class="md-ellipsis">
+      Task 9: Implement do_uninstall()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-10-update-envexample" class="md-nav__link">
+    <span class="md-ellipsis">
+      Task 10: Update .env.example
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#integration-points" class="md-nav__link">
+    <span class="md-ellipsis">
+      Integration Points
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#validation-loop" class="md-nav__link">
+    <span class="md-ellipsis">
+      Validation Loop
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Validation Loop">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#level-1-syntax-static-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      Level 1: Syntax &amp; Static Analysis
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#level-2-functional-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      Level 2: Functional Tests
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#level-3-integration-verification" class="md-nav__link">
+    <span class="md-ellipsis">
+      Level 3: Integration Verification
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#final-validation-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      Final Validation Checklist
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#anti-patterns-to-avoid" class="md-nav__link">
+    <span class="md-ellipsis">
+      Anti-Patterns to Avoid
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#confidence-score-810" class="md-nav__link">
+    <span class="md-ellipsis">
+      Confidence Score: 8/10
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#goal" class="md-nav__link">
+    <span class="md-ellipsis">
+      Goal
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what" class="md-nav__link">
+    <span class="md-ellipsis">
+      What
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="What">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#user-visible-behavior" class="md-nav__link">
+    <span class="md-ellipsis">
+      User-visible behavior
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#success-criteria" class="md-nav__link">
+    <span class="md-ellipsis">
+      Success Criteria
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#all-needed-context" class="md-nav__link">
+    <span class="md-ellipsis">
+      All Needed Context
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="All Needed Context">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#documentation-references" class="md-nav__link">
+    <span class="md-ellipsis">
+      Documentation &amp; References
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#current-codebase-tree" class="md-nav__link">
+    <span class="md-ellipsis">
+      Current Codebase Tree
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#desired-codebase-tree" class="md-nav__link">
+    <span class="md-ellipsis">
+      Desired Codebase Tree
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#known-gotchas-framework-quirks" class="md-nav__link">
+    <span class="md-ellipsis">
+      Known Gotchas &amp; Framework Quirks
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#implementation-blueprint" class="md-nav__link">
+    <span class="md-ellipsis">
+      Implementation Blueprint
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Implementation Blueprint">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#optionconfig-design" class="md-nav__link">
+    <span class="md-ellipsis">
+      Option:config() Design
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#envexample-design" class="md-nav__link">
+    <span class="md-ellipsis">
+      .env.example Design
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#constant-data-embedded-in-script" class="md-nav__link">
+    <span class="md-ellipsis">
+      Constant Data (embedded in script)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scriptmain-dispatch" class="md-nav__link">
+    <span class="md-ellipsis">
+      Script:main() Dispatch
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#task-list-in-execution-order" class="md-nav__link">
+    <span class="md-ellipsis">
+      Task List (in execution order)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Task List (in execution order)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#task-1-update-script-metadata-and-optionconfig" class="md-nav__link">
+    <span class="md-ellipsis">
+      Task 1: Update script metadata and Option:config()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-2-define-constant-arrays-scan-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Task 2: Define constant arrays (scan patterns)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-3-implement-scan-helper-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Task 3: Implement scan helper functions
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-4-implement-detection-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Task 4: Implement detection functions
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-5-implement-notification-function" class="md-nav__link">
+    <span class="md-ellipsis">
+      Task 5: Implement notification function
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-6-implement-do_scan" class="md-nav__link">
+    <span class="md-ellipsis">
+      Task 6: Implement do_scan()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-7-implement-do_install" class="md-nav__link">
+    <span class="md-ellipsis">
+      Task 7: Implement do_install()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-8-implement-do_deploy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Task 8: Implement do_deploy()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-9-implement-do_uninstall" class="md-nav__link">
+    <span class="md-ellipsis">
+      Task 9: Implement do_uninstall()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-10-update-envexample" class="md-nav__link">
+    <span class="md-ellipsis">
+      Task 10: Update .env.example
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#integration-points" class="md-nav__link">
+    <span class="md-ellipsis">
+      Integration Points
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#validation-loop" class="md-nav__link">
+    <span class="md-ellipsis">
+      Validation Loop
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Validation Loop">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#level-1-syntax-static-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      Level 1: Syntax &amp; Static Analysis
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#level-2-functional-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      Level 2: Functional Tests
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#level-3-integration-verification" class="md-nav__link">
+    <span class="md-ellipsis">
+      Level 3: Integration Verification
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#final-validation-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      Final Validation Checklist
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#anti-patterns-to-avoid" class="md-nav__link">
+    <span class="md-ellipsis">
+      Anti-Patterns to Avoid
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#confidence-score-810" class="md-nav__link">
+    <span class="md-ellipsis">
+      Confidence Score: 8/10
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="prp-implement-forge-guardian-in-bashew-framework">PRP: Implement Forge Guardian in Bashew Framework<a class="headerlink" href="#prp-implement-forge-guardian-in-bashew-framework" title="Permanent link">&para;</a></h1>
+<h2 id="goal">Goal<a class="headerlink" href="#goal" title="Permanent link">&para;</a></h2>
+<p>Rewrite the functionality from three original scripts (<code>original/forge-guardian.sh</code>, <code>original/deploy-remote.sh</code>, <code>original/install.sh</code>) into a single bashew-based script (<code>forge-guardian.sh</code>) with three main verbs:</p>
+<ol>
+<li><strong><code>scan</code></strong> — Run security checks on all Laravel/Forge projects (auto-detected via <code>find $root -type d -name .git</code>)</li>
+<li><strong><code>install</code></strong> — Local installation on a Forge server (cron, logrotate, permissions)</li>
+<li><strong><code>deploy</code></strong> — Remote installation over SSH to one or more servers (KeyFile auth)</li>
+</ol>
+<p>Plus supporting verbs: <code>uninstall</code>, <code>check</code>, <code>env</code>, <code>update</code>.</p>
+<h2 id="why">Why<a class="headerlink" href="#why" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Consolidation</strong>: Three separate scripts become one tool with clear verbs</li>
+<li><strong>Bashew framework</strong>: Proper CLI parsing, .env support, logging, help text, update mechanism</li>
+<li><strong>Auto-detection</strong>: Projects discovered via filesystem scan instead of hardcoded arrays</li>
+<li><strong>Security</strong>: Detect injected backdoors, obfuscated shells, tampered files, suspicious crons on Laravel Forge servers</li>
+</ul>
+<h2 id="what">What<a class="headerlink" href="#what" title="Permanent link">&para;</a></h2>
+<h3 id="user-visible-behavior">User-visible behavior<a class="headerlink" href="#user-visible-behavior" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="c1"># On local machine - deploy to remote servers</span>
+forge-guardian.sh<span class="w"> </span>deploy<span class="w"> </span>-s<span class="w"> </span><span class="m">142</span>.93.1.100<span class="w"> </span>-s<span class="w"> </span><span class="m">167</span>.99.2.200
+forge-guardian.sh<span class="w"> </span>deploy<span class="w"> </span>--servers<span class="w"> </span>servers.txt<span class="w"> </span>--slack<span class="w"> </span><span class="s2">&quot;https://hooks.slack.com/...&quot;</span>
+
+<span class="c1"># On server - install locally (sets up cron + logrotate)</span>
+sudo<span class="w"> </span>forge-guardian.sh<span class="w"> </span>install
+
+<span class="c1"># On server - run security scan (called by cron)</span>
+forge-guardian.sh<span class="w"> </span>scan
+forge-guardian.sh<span class="w"> </span>scan<span class="w"> </span>--mode<span class="w"> </span>heal<span class="w">     </span><span class="c1"># auto-heal threats</span>
+forge-guardian.sh<span class="w"> </span>scan<span class="w"> </span>--mode<span class="w"> </span>dryrun<span class="w">   </span><span class="c1"># show what heal would do</span>
+
+<span class="c1"># On server - remove</span>
+sudo<span class="w"> </span>forge-guardian.sh<span class="w"> </span>uninstall
+</code></pre></div>
+<h3 id="success-criteria">Success Criteria<a class="headerlink" href="#success-criteria" title="Permanent link">&para;</a></h3>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>forge-guardian.sh scan</code> auto-detects projects under <code>$root/</code> and runs all 5 detectors</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>forge-guardian.sh scan --mode heal</code> quarantines malicious files and git-restores tampered tracked files</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>forge-guardian.sh install</code> copies itself to <code>/opt/forge-guardian/</code>, sets up cron and logrotate</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>forge-guardian.sh deploy -s &lt;server&gt;</code> uploads script via SCP, runs remote install via SSH</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>forge-guardian.sh deploy --servers &lt;file&gt;</code> reads servers from file</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Notifications (Slack, Discord, Telegram, Email) fire when threats are found</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> All config can be set via .env file OR CLI options</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>forge-guardian.sh check</code> shows current config values</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>bash -n forge-guardian.sh</code> passes</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>shellcheck forge-guardian.sh</code> passes (with acceptable SC directives)</li>
+</ul>
+<hr />
+<h2 id="all-needed-context">All Needed Context<a class="headerlink" href="#all-needed-context" title="Permanent link">&para;</a></h2>
+<h3 id="documentation-references">Documentation &amp; References<a class="headerlink" href="#documentation-references" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">forge-guardian.sh</span>
+<span class="w">  </span><span class="nt">why</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Target</span><span class="nv"> </span><span class="s">file</span><span class="nv"> </span><span class="s">-</span><span class="nv"> </span><span class="s">bashew</span><span class="nv"> </span><span class="s">template</span><span class="nv"> </span><span class="s">with</span><span class="nv"> </span><span class="s">framework</span><span class="nv"> </span><span class="s">code</span><span class="nv"> </span><span class="s">below</span><span class="nv"> </span><span class="s">line</span><span class="nv"> </span><span class="s">172.</span><span class="nv"> </span><span class="s">Edit</span><span class="nv"> </span><span class="s">ONLY</span><span class="nv"> </span><span class="s">above</span><span class="nv"> </span><span class="s">line</span><span class="nv"> </span><span class="s">172.&quot;</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">original/forge-guardian.sh</span>
+<span class="w">  </span><span class="nt">why</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Source</span><span class="nv"> </span><span class="s">for</span><span class="nv"> </span><span class="s">scan</span><span class="nv"> </span><span class="s">logic:</span><span class="nv"> </span><span class="s">5</span><span class="nv"> </span><span class="s">detectors,</span><span class="nv"> </span><span class="s">malicious</span><span class="nv"> </span><span class="s">signatures,</span><span class="nv"> </span><span class="s">suspicious</span><span class="nv"> </span><span class="s">patterns,</span><span class="nv"> </span><span class="s">allowlist,</span><span class="nv"> </span><span class="s">quarantine,</span><span class="nv"> </span><span class="s">notifications&quot;</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">original/deploy-remote.sh</span>
+<span class="w">  </span><span class="nt">why</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Source</span><span class="nv"> </span><span class="s">for</span><span class="nv"> </span><span class="s">deploy</span><span class="nv"> </span><span class="s">logic:</span><span class="nv"> </span><span class="s">SSH/SCP</span><span class="nv"> </span><span class="s">helpers,</span><span class="nv"> </span><span class="s">remote</span><span class="nv"> </span><span class="s">install</span><span class="nv"> </span><span class="s">script</span><span class="nv"> </span><span class="s">builder,</span><span class="nv"> </span><span class="s">server</span><span class="nv"> </span><span class="s">list</span><span class="nv"> </span><span class="s">parsing&quot;</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">original/install.sh</span>
+<span class="w">  </span><span class="nt">why</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Source</span><span class="nv"> </span><span class="s">for</span><span class="nv"> </span><span class="s">install</span><span class="nv"> </span><span class="s">logic:</span><span class="nv"> </span><span class="s">auto-detect</span><span class="nv"> </span><span class="s">projects,</span><span class="nv"> </span><span class="s">cron</span><span class="nv"> </span><span class="s">setup,</span><span class="nv"> </span><span class="s">logrotate</span><span class="nv"> </span><span class="s">config&quot;</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">original/examples/servers.txt</span>
+<span class="w">  </span><span class="nt">why</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Example</span><span class="nv"> </span><span class="s">servers</span><span class="nv"> </span><span class="s">file</span><span class="nv"> </span><span class="s">format</span><span class="nv"> </span><span class="s">(one</span><span class="nv"> </span><span class="s">per</span><span class="nv"> </span><span class="s">line,</span><span class="nv"> </span><span class="s">#</span><span class="nv"> </span><span class="s">comments)&quot;</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">README.md</span>
+<span class="w">  </span><span class="nt">why</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Documents</span><span class="nv"> </span><span class="s">expected</span><span class="nv"> </span><span class="s">behavior,</span><span class="nv"> </span><span class="s">all</span><span class="nv"> </span><span class="s">CLI</span><span class="nv"> </span><span class="s">flags,</span><span class="nv"> </span><span class="s">notification</span><span class="nv"> </span><span class="s">setup,</span><span class="nv"> </span><span class="s">hardening</span><span class="nv"> </span><span class="s">recommendations&quot;</span>
+</code></pre></div>
+<h3 id="current-codebase-tree">Current Codebase Tree<a class="headerlink" href="#current-codebase-tree" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>forge-guardian/
+├── forge-guardian.sh          # Bashew template (TARGET - edit this)
+├── original/
+│   ├── forge-guardian.sh      # Reference: scan/detection logic
+│   ├── deploy-remote.sh       # Reference: SSH deploy logic
+│   ├── install.sh             # Reference: local install logic
+│   └── examples/
+│       └── servers.txt        # Example server list
+├── .env                       # Empty (will hold config)
+├── .env.example               # Empty (will define all vars)
+├── VERSION.md                 # 0.0.0
+├── README.md                  # Full documentation
+└── LICENSE                    # MIT
+</code></pre></div>
+<h3 id="desired-codebase-tree">Desired Codebase Tree<a class="headerlink" href="#desired-codebase-tree" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>forge-guardian/
+├── forge-guardian.sh          # MODIFIED: full implementation with all verbs
+├── .env.example               # MODIFIED: all notification/config vars documented
+├── original/                  # UNCHANGED: reference only
+│   ├── forge-guardian.sh
+│   ├── deploy-remote.sh
+│   ├── install.sh
+│   └── examples/
+│       └── servers.txt
+├── .env                       # User config (gitignored)
+├── VERSION.md
+├── README.md
+└── LICENSE
+</code></pre></div>
+<h3 id="known-gotchas-framework-quirks">Known Gotchas &amp; Framework Quirks<a class="headerlink" href="#known-gotchas-framework-quirks" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="c1"># CRITICAL: Only edit ABOVE line 172 (&quot;DO NOT MODIFY BELOW THIS LINE&quot;)</span>
+<span class="c1"># The bashew framework code below that line handles all parsing, initialization, etc.</span>
+
+<span class="c1"># CRITICAL: run_as_root must be changed from -1 to 0</span>
+<span class="c1"># Original: run_as_root=-1 (MAY NOT run as root)</span>
+<span class="c1"># Needed:   run_as_root=0  (don&#39;t check - scan/install need root, deploy doesn&#39;t)</span>
+
+<span class="c1"># CRITICAL: grep -P (PCRE) is NOT available on macOS</span>
+<span class="c1"># The original uses grep -qPi for malicious signatures</span>
+<span class="c1"># On macOS (dev), this fails. On Linux (production), it works.</span>
+<span class="c1"># Use Os:require &quot;grep&quot; and document that scanning needs GNU grep on Linux servers</span>
+
+<span class="c1"># CRITICAL: stat command differs between macOS and Linux</span>
+<span class="c1"># macOS: stat -f%z (file size), stat -f &quot;%OLp&quot; (permissions)</span>
+<span class="c1"># Linux: stat --printf=&quot;%s&quot; (file size), stat -c &quot;%a&quot; (permissions)</span>
+<span class="c1"># The original handles both - preserve this pattern</span>
+
+<span class="c1"># CRITICAL: bashew uses IFS=$&#39;\n\t&#39; - this is stricter than the original</span>
+<span class="c1"># Be careful with word splitting in arrays and loops</span>
+
+<span class="c1"># IMPORTANT: bashew auto-loads .env files from multiple locations</span>
+<span class="c1"># This is perfect for notification config - user puts slack=https://... in .env</span>
+<span class="c1"># Variable names from Option:config become .env keys (lowercase long names)</span>
+
+<span class="c1"># IMPORTANT: The choice validator in bashew is case-sensitive for the list</span>
+<span class="c1"># but Script:main() uses ${action,,} for matching - keep verb names lowercase</span>
+
+<span class="c1"># IMPORTANT: list type options use -x &lt;val&gt; -x &lt;val2&gt; syntax</span>
+<span class="c1"># list|s|server|server to deploy to =&gt; ${server[@]} array</span>
+<span class="c1"># Usage: forge-guardian.sh deploy -s host1 -s host2</span>
+</code></pre></div>
+<hr />
+<h2 id="implementation-blueprint">Implementation Blueprint<a class="headerlink" href="#implementation-blueprint" title="Permanent link">&para;</a></h2>
+<h3 id="optionconfig-design">Option:config() Design<a class="headerlink" href="#optionconfig-design" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">function</span><span class="w"> </span>Option:config<span class="o">()</span><span class="w"> </span><span class="o">{</span>
+<span class="w">  </span>grep<span class="w"> </span><span class="o">&lt;&lt;&lt;</span><span class="s1">&#39;</span>
+<span class="s1">#commented lines will be filtered</span>
+<span class="s1">flag|h|help|show usage</span>
+<span class="s1">flag|Q|QUIET|no output</span>
+<span class="s1">flag|V|VERBOSE|also show debug messages</span>
+<span class="s1">flag|f|FORCE|do not ask for confirmation (always yes)</span>
+<span class="s1">option|L|LOG_DIR|folder for log files|$HOME/log/$script_prefix</span>
+<span class="s1">option|T|TMP_DIR|folder for temp files|/tmp/$script_prefix</span>
+<span class="s1">option|u|user|SSH user for deploy|root</span>
+<span class="s1">option|k|key|SSH private key path|$HOME/.ssh/id_rsa</span>
+<span class="s1">option|p|port|SSH port|22</span>
+<span class="s1">option|S|servers|file with server list</span>
+<span class="s1">option|w|slack|Slack webhook URL</span>
+<span class="s1">option|D|discord|Discord webhook URL</span>
+<span class="s1">option|G|telegram|Telegram config (bot_token:chat_id)</span>
+<span class="s1">option|e|email|notification email address</span>
+<span class="s1">option|m|mode|scan mode: detect/heal/dryrun|detect</span>
+<span class="s1">option|i|interval|cron interval in minutes|5</span>
+<span class="s1">option|r|root|root folder for Forge projects|$root</span>
+<span class="s1">option|q|quarantine|quarantine directory|/opt/forge-guardian/quarantine</span>
+<span class="s1">list|s|server|server to deploy to</span>
+<span class="s1">choice|1|action|action to perform|scan,install,deploy,uninstall,check,env,update</span>
+<span class="s1">&#39;</span><span class="w"> </span>-v<span class="w"> </span>-e<span class="w"> </span><span class="s1">&#39;^#&#39;</span><span class="w"> </span>-e<span class="w"> </span><span class="s1">&#39;^\s*$&#39;</span>
+<span class="o">}</span>
+</code></pre></div>
+<p><strong>Variable mapping:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Variable</th>
+<th>Default</th>
+<th>Used by</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--user</code></td>
+<td><code>$user</code></td>
+<td><code>root</code></td>
+<td>deploy</td>
+</tr>
+<tr>
+<td><code>--key</code></td>
+<td><code>$key</code></td>
+<td><code>~/.ssh/id_rsa</code></td>
+<td>deploy</td>
+</tr>
+<tr>
+<td><code>--port</code></td>
+<td><code>$port</code></td>
+<td><code>22</code></td>
+<td>deploy</td>
+</tr>
+<tr>
+<td><code>--servers</code></td>
+<td><code>$servers</code></td>
+<td>``</td>
+<td>deploy (file)</td>
+</tr>
+<tr>
+<td><code>--server</code> (list)</td>
+<td><code>${server[@]}</code></td>
+<td><code>()</code></td>
+<td>deploy (CLI)</td>
+</tr>
+<tr>
+<td><code>--slack</code></td>
+<td><code>$slack</code></td>
+<td>``</td>
+<td>scan, deploy</td>
+</tr>
+<tr>
+<td><code>--discord</code></td>
+<td><code>$discord</code></td>
+<td>``</td>
+<td>scan, deploy</td>
+</tr>
+<tr>
+<td><code>--telegram</code></td>
+<td><code>$telegram</code></td>
+<td>``</td>
+<td>scan, deploy</td>
+</tr>
+<tr>
+<td><code>--email</code></td>
+<td><code>$email</code></td>
+<td>``</td>
+<td>scan, deploy</td>
+</tr>
+<tr>
+<td><code>--mode</code></td>
+<td><code>$mode</code></td>
+<td><code>detect</code></td>
+<td>scan, deploy</td>
+</tr>
+<tr>
+<td><code>--interval</code></td>
+<td><code>$interval</code></td>
+<td><code>5</code></td>
+<td>install, deploy</td>
+</tr>
+<tr>
+<td><code>--root</code></td>
+<td><code>$root</code></td>
+<td><code>/home/forge</code></td>
+<td>scan, install</td>
+</tr>
+<tr>
+<td><code>--quarantine</code></td>
+<td><code>$quarantine</code></td>
+<td><code>/opt/forge-guardian/quarantine</code></td>
+<td>scan</td>
+</tr>
+</tbody>
+</table>
+<h3 id="envexample-design">.env.example Design<a class="headerlink" href="#envexample-design" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="c1"># Forge Guardian Configuration</span>
+<span class="c1"># Copy to .env and fill in your values</span>
+
+<span class="c1"># Notification webhooks (leave empty to disable)</span>
+<span class="nv">slack</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+<span class="nv">discord</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+<span class="nv">telegram</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+<span class="nv">email</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+
+<span class="c1"># Root folder for Forge projects (auto-detect git repos under this path)</span>
+<span class="nv">root</span><span class="o">=</span><span class="s2">&quot;/home/forge&quot;</span>
+
+<span class="c1"># Scan mode: detect (report only) / heal (quarantine + restore) / dryrun (show what heal would do)</span>
+<span class="nv">mode</span><span class="o">=</span><span class="s2">&quot;detect&quot;</span>
+
+<span class="c1"># SSH settings for remote deploy</span>
+<span class="nv">user</span><span class="o">=</span><span class="s2">&quot;root&quot;</span>
+<span class="nv">key</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$HOME</span><span class="s2">/.ssh/id_rsa&quot;</span>
+<span class="nv">port</span><span class="o">=</span><span class="s2">&quot;22&quot;</span>
+
+<span class="c1"># Cron interval in minutes</span>
+<span class="nv">interval</span><span class="o">=</span><span class="s2">&quot;5&quot;</span>
+
+<span class="c1"># Quarantine directory for healed files</span>
+<span class="nv">quarantine</span><span class="o">=</span><span class="s2">&quot;/opt/forge-guardian/quarantine&quot;</span>
+</code></pre></div>
+<h3 id="constant-data-embedded-in-script">Constant Data (embedded in script)<a class="headerlink" href="#constant-data-embedded-in-script" title="Permanent link">&para;</a></h3>
+<p>Port these arrays from <code>original/forge-guardian.sh</code>:
+- <code>ALLOWLIST</code> array (lines 50-63)
+- <code>SUSPICIOUS_PATTERNS</code> array (lines 66-80)
+- <code>MALICIOUS_SIGNATURES</code> array (lines 83-104)</p>
+<p>These are readonly arrays defined at the top of the helper functions section.</p>
+<h3 id="scriptmain-dispatch">Script:main() Dispatch<a class="headerlink" href="#scriptmain-dispatch" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">function</span><span class="w"> </span>Script:main<span class="o">()</span><span class="w"> </span><span class="o">{</span>
+<span class="w">  </span>IO:log<span class="w"> </span><span class="s2">&quot;[</span><span class="nv">$script_basename</span><span class="s2">] </span><span class="nv">$script_version</span><span class="s2"> started&quot;</span>
+<span class="w">  </span><span class="k">case</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">action</span><span class="p">,,</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="k">in</span>
+<span class="w">  </span>scan<span class="o">)</span><span class="w">     </span>do_scan<span class="w"> </span><span class="p">;;</span>
+<span class="w">  </span>install<span class="o">)</span><span class="w">  </span>do_install<span class="w"> </span><span class="p">;;</span>
+<span class="w">  </span>deploy<span class="o">)</span><span class="w">   </span>do_deploy<span class="w"> </span><span class="p">;;</span>
+<span class="w">  </span>uninstall<span class="o">)</span><span class="w"> </span>do_uninstall<span class="w"> </span><span class="p">;;</span>
+<span class="w">  </span>check<span class="p">|</span>env<span class="o">)</span><span class="w"> </span>Script:check<span class="w"> </span><span class="p">;;</span>
+<span class="w">  </span>update<span class="o">)</span><span class="w">   </span>Script:git_pull<span class="w"> </span><span class="p">;;</span>
+<span class="w">  </span>*<span class="o">)</span><span class="w">        </span>IO:die<span class="w"> </span><span class="s2">&quot;action [</span><span class="nv">$action</span><span class="s2">] not recognized&quot;</span><span class="w"> </span><span class="p">;;</span>
+<span class="w">  </span><span class="k">esac</span>
+<span class="w">  </span>IO:log<span class="w"> </span><span class="s2">&quot;[</span><span class="nv">$script_basename</span><span class="s2">] ended after </span><span class="nv">$SECONDS</span><span class="s2"> secs&quot;</span>
+<span class="o">}</span>
+</code></pre></div>
+<hr />
+<h2 id="task-list-in-execution-order">Task List (in execution order)<a class="headerlink" href="#task-list-in-execution-order" title="Permanent link">&para;</a></h2>
+<h3 id="task-1-update-script-metadata-and-optionconfig">Task 1: Update script metadata and Option:config()<a class="headerlink" href="#task-1-update-script-metadata-and-optionconfig" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nt">MODIFY forge-guardian.sh</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CHANGE run_as_root from -1 to 0</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">REPLACE Option:config() with full flag/option/list/choice definitions</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">REPLACE Script:main() with verb dispatch to do_scan, do_install, do_deploy, do_uninstall</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">REMOVE placeholder do_action1() and do_action2() functions</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ADD TIP comments for each verb</span>
+</code></pre></div>
+<p><strong>Pseudocode:</strong>
+<div class="highlight"><pre><span></span><code><span class="c1"># Change line 61:</span>
+<span class="nb">readonly</span><span class="w"> </span><span class="nv">run_as_root</span><span class="o">=</span><span class="m">0</span><span class="w">  </span><span class="c1"># 0 = don&#39;t check (scan/install need root, deploy doesn&#39;t)</span>
+
+<span class="c1"># Option:config() as designed above</span>
+
+<span class="c1"># Script:main() as designed above</span>
+</code></pre></div></p>
+<h3 id="task-2-define-constant-arrays-scan-patterns">Task 2: Define constant arrays (scan patterns)<a class="headerlink" href="#task-2-define-constant-arrays-scan-patterns" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nt">ADD after Script:main() closing brace</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DEFINE readonly ALLOWLIST array (from original/forge-guardian.sh lines 50-63)</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DEFINE readonly SUSPICIOUS_PATTERNS array (from original lines 66-80)</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DEFINE readonly MALICIOUS_SIGNATURES array (from original lines 83-104)</span>
+</code></pre></div>
+<p><strong>Pseudocode:</strong>
+<div class="highlight"><pre><span></span><code><span class="c1"># These are constant arrays used by the scan detectors</span>
+<span class="c1"># Ported from original/forge-guardian.sh</span>
+
+<span class="nb">readonly</span><span class="w"> </span>-a<span class="w"> </span><span class="nv">FG_ALLOWLIST</span><span class="o">=(</span>
+<span class="w">    </span><span class="s2">&quot;storage/framework/cache/*&quot;</span>
+<span class="w">    </span><span class="s2">&quot;storage/framework/sessions/*&quot;</span>
+<span class="w">    </span><span class="s2">&quot;storage/framework/views/*&quot;</span>
+<span class="w">    </span><span class="s2">&quot;storage/logs/*&quot;</span>
+<span class="w">    </span><span class="s2">&quot;storage/app/*&quot;</span>
+<span class="w">    </span><span class="s2">&quot;bootstrap/cache/*&quot;</span>
+<span class="w">    </span><span class="s2">&quot;.env&quot;</span>
+<span class="w">    </span><span class="s2">&quot;vendor/*&quot;</span>
+<span class="w">    </span><span class="s2">&quot;node_modules/*&quot;</span>
+<span class="w">    </span><span class="s2">&quot;public/build/*&quot;</span>
+<span class="w">    </span><span class="s2">&quot;public/hot&quot;</span>
+<span class="w">    </span><span class="s2">&quot;public/storage&quot;</span>
+<span class="o">)</span>
+
+<span class="nb">readonly</span><span class="w"> </span>-a<span class="w"> </span><span class="nv">FG_SUSPICIOUS_PATTERNS</span><span class="o">=(</span>
+<span class="w">    </span><span class="s1">&#39;cache[0-9]*\.php&#39;</span>
+<span class="w">    </span><span class="s1">&#39;config[0-9]*\.php&#39;</span>
+<span class="w">    </span><span class="c1"># ... (all from original lines 67-79)</span>
+<span class="o">)</span>
+
+<span class="nb">readonly</span><span class="w"> </span>-a<span class="w"> </span><span class="nv">FG_MALICIOUS_SIGNATURES</span><span class="o">=(</span>
+<span class="w">    </span><span class="s1">&#39;eval\s*(\s*base64_decode&#39;</span>
+<span class="w">    </span><span class="s1">&#39;eval\s*(\s*gzinflate&#39;</span>
+<span class="w">    </span><span class="c1"># ... (all from original lines 84-103)</span>
+<span class="o">)</span>
+</code></pre></div></p>
+<h3 id="task-3-implement-scan-helper-functions">Task 3: Implement scan helper functions<a class="headerlink" href="#task-3-implement-scan-helper-functions" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nt">ADD helper functions</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">is_allowlisted() - check path against FG_ALLOWLIST (from original lines 162-171)</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">scan_file_content() - grep for malicious signatures (from original lines 174-199)</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">is_suspicious_filename() - check against FG_SUSPICIOUS_PATTERNS (from original lines 202-211)</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">quarantine_file() - move file preserving dir structure (from original lines 214-232)</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">git_restore_file() - git checkout tracked file (from original lines 235-248)</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">remove_untracked() - quarantine or delete untracked file (from original lines 251-265)</span>
+</code></pre></div>
+<p><strong>Key adaptations for bashew:</strong>
+<div class="highlight"><pre><span></span><code><span class="k">function</span><span class="w"> </span>is_allowlisted<span class="o">()</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="nb">local</span><span class="w"> </span><span class="nv">filepath</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$1</span><span class="s2">&quot;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span>pattern<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">FG_ALLOWLIST</span><span class="p">[@]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">        </span><span class="c1"># shellcheck disable=SC2254</span>
+<span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$filepath</span><span class="s2">&quot;</span><span class="w"> </span><span class="k">in</span>
+<span class="w">            </span><span class="nv">$pattern</span><span class="o">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="p">;;</span>
+<span class="w">        </span><span class="k">esac</span>
+<span class="w">    </span><span class="k">done</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="m">1</span>
+<span class="o">}</span>
+
+<span class="k">function</span><span class="w"> </span>scan_file_content<span class="o">()</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="nb">local</span><span class="w"> </span><span class="nv">filepath</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$1</span><span class="s2">&quot;</span>
+<span class="w">    </span><span class="c1"># Skip non-PHP files</span>
+<span class="w">    </span><span class="o">[[</span><span class="w"> </span>!<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$filepath</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">=</span>~<span class="w"> </span><span class="se">\.</span><span class="o">(</span>php<span class="p">|</span>phtml<span class="p">|</span>pht<span class="p">|</span>php<span class="o">[</span><span class="m">0</span>-9<span class="o">]</span><span class="p">|</span>inc<span class="o">)</span>$<span class="w"> </span><span class="o">]]</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="m">1</span>
+<span class="w">    </span><span class="c1"># Skip files &gt; 5MB</span>
+<span class="w">    </span><span class="nb">local</span><span class="w"> </span>filesize
+<span class="w">    </span><span class="nv">filesize</span><span class="o">=</span><span class="k">$(</span>stat<span class="w"> </span>-f%z<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$filepath</span><span class="s2">&quot;</span><span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="o">||</span><span class="w"> </span>stat<span class="w"> </span>--printf<span class="o">=</span><span class="s2">&quot;%s&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$filepath</span><span class="s2">&quot;</span><span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;0&quot;</span><span class="k">)</span>
+<span class="w">    </span><span class="o">((</span><span class="w"> </span>filesize<span class="w"> </span>&gt;<span class="w"> </span><span class="m">5242880</span><span class="w"> </span><span class="o">))</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="m">1</span>
+
+<span class="w">    </span><span class="k">for</span><span class="w"> </span>sig<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">FG_MALICIOUS_SIGNATURES</span><span class="p">[@]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span>grep<span class="w"> </span>-qPi<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$sig</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$filepath</span><span class="s2">&quot;</span><span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">            </span>IO:alert<span class="w"> </span><span class="s2">&quot;MALICIOUS SIGNATURE in </span><span class="nv">$filepath</span><span class="s2">: matches &#39;</span><span class="nv">$sig</span><span class="s2">&#39;&quot;</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="m">0</span>
+<span class="w">        </span><span class="k">fi</span>
+<span class="w">    </span><span class="k">done</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="m">1</span>
+<span class="o">}</span>
+
+<span class="k">function</span><span class="w"> </span>quarantine_file<span class="o">()</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="nb">local</span><span class="w"> </span><span class="nv">filepath</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$1</span><span class="s2">&quot;</span>
+<span class="w">    </span><span class="nb">local</span><span class="w"> </span><span class="nv">project_dir</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$2</span><span class="s2">&quot;</span>
+<span class="w">    </span><span class="nb">local</span><span class="w"> </span>run_id
+<span class="w">    </span><span class="nv">run_id</span><span class="o">=</span><span class="k">$(</span>date<span class="w"> </span><span class="s1">&#39;+%Y%m%d_%H%M%S&#39;</span><span class="k">)</span>_<span class="nv">$$</span>
+<span class="w">    </span><span class="nb">local</span><span class="w"> </span><span class="nv">relative_path</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">filepath</span><span class="p">#</span><span class="nv">$project_dir</span><span class="p">/</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="w">    </span><span class="nb">local</span><span class="w"> </span><span class="nv">quarantine_path</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">quarantine</span><span class="si">}</span><span class="s2">/</span><span class="si">${</span><span class="nv">run_id</span><span class="si">}</span><span class="s2">/</span><span class="si">${</span><span class="nv">project_dir</span><span class="p">##*/</span><span class="si">}</span><span class="s2">/</span><span class="si">${</span><span class="nv">relative_path</span><span class="si">}</span><span class="s2">&quot;</span>
+
+<span class="w">    </span>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>dirname<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$quarantine_path</span><span class="s2">&quot;</span><span class="k">)</span><span class="s2">&quot;</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="o">[[</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$mode</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">&quot;dryrun&quot;</span><span class="w"> </span><span class="o">]]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">        </span>IO:print<span class="w"> </span><span class="s2">&quot;[DRY-RUN] Would quarantine: </span><span class="nv">$filepath</span><span class="s2"> -&gt; </span><span class="nv">$quarantine_path</span><span class="s2">&quot;</span>
+<span class="w">        </span><span class="k">return</span>
+<span class="w">    </span><span class="k">fi</span>
+<span class="w">    </span>cp<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$filepath</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$quarantine_path</span><span class="s2">&quot;</span><span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">true</span>
+<span class="w">    </span>rm<span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$filepath</span><span class="s2">&quot;</span>
+<span class="w">    </span>IO:alert<span class="w"> </span><span class="s2">&quot;QUARANTINED: </span><span class="nv">$filepath</span><span class="s2"> -&gt; </span><span class="nv">$quarantine_path</span><span class="s2">&quot;</span>
+<span class="o">}</span>
+
+<span class="k">function</span><span class="w"> </span>git_restore_file<span class="o">()</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="nb">local</span><span class="w"> </span><span class="nv">filepath</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$1</span><span class="s2">&quot;</span>
+<span class="w">    </span><span class="nb">local</span><span class="w"> </span><span class="nv">project_dir</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$2</span><span class="s2">&quot;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="o">[[</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$mode</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">&quot;dryrun&quot;</span><span class="w"> </span><span class="o">]]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">        </span>IO:print<span class="w"> </span><span class="s2">&quot;[DRY-RUN] Would git restore: </span><span class="nv">$filepath</span><span class="s2">&quot;</span>
+<span class="w">        </span><span class="k">return</span>
+<span class="w">    </span><span class="k">fi</span>
+<span class="w">    </span><span class="o">(</span><span class="nb">cd</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$project_dir</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>git<span class="w"> </span>checkout<span class="w"> </span>--<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$filepath</span><span class="s2">&quot;</span><span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="o">)</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>IO:success<span class="w"> </span><span class="s2">&quot;RESTORED from git: </span><span class="nv">$filepath</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>IO:alert<span class="w"> </span><span class="s2">&quot;Failed to git-restore: </span><span class="nv">$filepath</span><span class="s2">&quot;</span>
+<span class="o">}</span>
+</code></pre></div></p>
+<h3 id="task-4-implement-detection-functions">Task 4: Implement detection functions<a class="headerlink" href="#task-4-implement-detection-functions" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nt">ADD detection functions (ported from original/forge-guardian.sh)</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">detect_git_anomalies()      - lines 310-394 of original</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">detect_webroot_injections() - lines 399-448 of original</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">detect_recent_changes()     - lines 453-487 of original</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">detect_suspicious_crons()   - lines 492-522 of original</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">detect_bad_permissions()    - lines 527-549 of original</span>
+</code></pre></div>
+<p><strong>Key adaptations for bashew:</strong>
+<div class="highlight"><pre><span></span><code><span class="c1"># Replace echo/alert/warn/log with IO:print/IO:alert/IO:debug</span>
+<span class="c1"># Replace $DRY_RUN/$AUTO_HEAL with $mode checks:</span>
+<span class="c1">#   &quot;detect&quot; = report only</span>
+<span class="c1">#   &quot;heal&quot;   = quarantine + restore</span>
+<span class="c1">#   &quot;dryrun&quot; = report what would be done</span>
+<span class="c1"># Replace direct ((THREATS_FOUND++)) with function return + caller tracking</span>
+<span class="c1"># Use IO:debug for verbose output instead of custom log_verbose</span>
+</code></pre></div></p>
+<p>Each detector takes <code>$project_dir</code> as argument and returns the number of threats found. The caller accumulates the total.</p>
+<h3 id="task-5-implement-notification-function">Task 5: Implement notification function<a class="headerlink" href="#task-5-implement-notification-function" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nt">ADD send_notifications() function</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Slack via curl (from original lines 274-279)</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Discord via curl (from original lines 282-287)</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Email via mail command (from original lines 290-293)</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Telegram via curl (from original lines 296-304)</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Use $slack, $discord, $email, $telegram variables from Option:config</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">For telegram</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">split on &quot;:&quot; to get bot_token and chat_id</span>
+</code></pre></div>
+<p><strong>Pseudocode:</strong>
+<div class="highlight"><pre><span></span><code><span class="k">function</span><span class="w"> </span>send_notifications<span class="o">()</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="nb">local</span><span class="w"> </span><span class="nv">message</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$1</span><span class="s2">&quot;</span>
+<span class="w">    </span><span class="nb">local</span><span class="w"> </span>hostname
+<span class="w">    </span><span class="nv">hostname</span><span class="o">=</span><span class="k">$(</span>hostname<span class="k">)</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="o">[[</span><span class="w"> </span>-n<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">slack</span><span class="k">:-</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">        </span>IO:debug<span class="w"> </span><span class="s2">&quot;Sending Slack notification&quot;</span>
+<span class="w">        </span>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>-H<span class="w"> </span><span class="s1">&#39;Content-type: application/json&#39;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">            </span>--data<span class="w"> </span><span class="s2">&quot;{\&quot;text\&quot;:\&quot;Forge Guardian Alert - </span><span class="si">${</span><span class="nv">hostname</span><span class="si">}</span><span class="s2">\n\n</span><span class="si">${</span><span class="nv">message</span><span class="si">}</span><span class="s2">\&quot;}&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">            </span><span class="s2">&quot;</span><span class="nv">$slack</span><span class="s2">&quot;</span><span class="w"> </span>&gt;<span class="w"> </span>/dev/null<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">true</span>
+<span class="w">    </span><span class="k">fi</span>
+<span class="w">    </span><span class="c1"># ... discord, email, telegram similarly</span>
+<span class="o">}</span>
+</code></pre></div></p>
+<h3 id="task-6-implement-do_scan">Task 6: Implement do_scan()<a class="headerlink" href="#task-6-implement-do_scan" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nt">ADD do_scan() function</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">Auto-detect projects</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">find $root -maxdepth 2 -type d -name .git</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Extract parent dir of each .git to get project dirs</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">For each project</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">run all 5 detectors</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Accumulate threats_found count</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">If threats &gt; 0</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">send notifications, exit 1</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">If clean</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">IO:success &quot;All clear&quot;, exit 0</span>
+</code></pre></div>
+<p><strong>Pseudocode:</strong>
+<div class="highlight"><pre><span></span><code><span class="k">function</span><span class="w"> </span>do_scan<span class="o">()</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span>Os:require<span class="w"> </span><span class="s2">&quot;git&quot;</span>
+<span class="w">    </span>Os:require<span class="w"> </span><span class="s2">&quot;grep&quot;</span>
+
+<span class="w">    </span>IO:print<span class="w"> </span><span class="s2">&quot;Forge Guardian Scan - Mode: </span><span class="nv">$mode</span><span class="s2">&quot;</span>
+
+<span class="w">    </span><span class="c1"># Auto-detect projects</span>
+<span class="w">    </span><span class="nb">local</span><span class="w"> </span>-a<span class="w"> </span><span class="nv">project_dirs</span><span class="o">=()</span>
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="nv">IFS</span><span class="o">=</span><span class="w"> </span><span class="nb">read</span><span class="w"> </span>-r<span class="w"> </span>-d<span class="w"> </span><span class="s1">&#39;&#39;</span><span class="w"> </span>gitdir<span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">        </span><span class="nv">project_dirs</span><span class="o">+=(</span><span class="s2">&quot;</span><span class="k">$(</span>dirname<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$gitdir</span><span class="s2">&quot;</span><span class="k">)</span><span class="s2">&quot;</span><span class="o">)</span>
+<span class="w">    </span><span class="k">done</span><span class="w"> </span>&lt;<span class="w"> </span>&lt;<span class="o">(</span>find<span class="w"> </span><span class="nv">$root</span><span class="w"> </span>-maxdepth<span class="w"> </span><span class="m">2</span><span class="w"> </span>-type<span class="w"> </span>d<span class="w"> </span>-name<span class="w"> </span>.git<span class="w"> </span>-print0<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="o">)</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="o">[[</span><span class="w"> </span><span class="si">${#</span><span class="nv">project_dirs</span><span class="p">[@]</span><span class="si">}</span><span class="w"> </span>-eq<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">        </span>IO:alert<span class="w"> </span><span class="s2">&quot;No git projects found under </span><span class="nv">$root</span><span class="s2">/&quot;</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="m">1</span>
+<span class="w">    </span><span class="k">fi</span>
+
+<span class="w">    </span>IO:print<span class="w"> </span><span class="s2">&quot;Found </span><span class="si">${#</span><span class="nv">project_dirs</span><span class="p">[@]</span><span class="si">}</span><span class="s2"> project(s)&quot;</span>
+
+<span class="w">    </span><span class="nb">local</span><span class="w"> </span><span class="nv">threats_found</span><span class="o">=</span><span class="m">0</span>
+<span class="w">    </span>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$quarantine</span><span class="s2">&quot;</span>
+
+<span class="w">    </span><span class="k">for</span><span class="w"> </span>dir<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">project_dirs</span><span class="p">[@]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">        </span>IO:print<span class="w"> </span><span class="s2">&quot;Project: </span><span class="nv">$dir</span><span class="s2">&quot;</span>
+<span class="w">        </span><span class="nv">threats_found</span><span class="o">=</span><span class="k">$((</span><span class="nv">threats_found</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="k">$(</span>detect_git_anomalies<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$dir</span><span class="s2">&quot;</span><span class="k">)))</span>
+<span class="w">        </span><span class="nv">threats_found</span><span class="o">=</span><span class="k">$((</span><span class="nv">threats_found</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="k">$(</span>detect_webroot_injections<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$dir</span><span class="s2">&quot;</span><span class="k">)))</span>
+<span class="w">        </span><span class="nv">threats_found</span><span class="o">=</span><span class="k">$((</span><span class="nv">threats_found</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="k">$(</span>detect_recent_changes<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$dir</span><span class="s2">&quot;</span><span class="k">)))</span>
+<span class="w">        </span><span class="nv">threats_found</span><span class="o">=</span><span class="k">$((</span><span class="nv">threats_found</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="k">$(</span>detect_bad_permissions<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$dir</span><span class="s2">&quot;</span><span class="k">)))</span>
+<span class="w">    </span><span class="k">done</span>
+<span class="w">    </span><span class="nv">threats_found</span><span class="o">=</span><span class="k">$((</span><span class="nv">threats_found</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="k">$(</span>detect_suspicious_crons<span class="k">)))</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="o">((</span><span class="w"> </span>threats_found<span class="w"> </span>&gt;<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">))</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">        </span>IO:alert<span class="w"> </span><span class="s2">&quot;TOTAL THREATS FOUND: </span><span class="si">${</span><span class="nv">threats_found</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="w">        </span><span class="nb">local</span><span class="w"> </span><span class="nv">summary</span><span class="o">=</span><span class="s2">&quot;Host: </span><span class="k">$(</span>hostname<span class="k">)</span><span class="s2">\nThreats: </span><span class="si">${</span><span class="nv">threats_found</span><span class="si">}</span><span class="s2">\nMode: </span><span class="si">${</span><span class="nv">mode</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="w">        </span>send_notifications<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$summary</span><span class="s2">&quot;</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="m">1</span>
+<span class="w">    </span><span class="k">else</span>
+<span class="w">        </span>IO:success<span class="w"> </span><span class="s2">&quot;All clear - no threats detected&quot;</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="m">0</span>
+<span class="w">    </span><span class="k">fi</span>
+<span class="o">}</span>
+</code></pre></div></p>
+<p><strong>IMPORTANT pattern</strong>: Each detect_* function must echo (print to stdout) the count of threats found as its last output, since we capture it with <code>$(...)</code>. Use IO:alert (stderr) for messages, and echo the count to stdout. Alternatively, use a global variable or temp file. The cleanest approach: use a global <code>threats_found</code> variable incremented inside each detector (simpler, matches the original).</p>
+<p><strong>Revised approach</strong>: Use a global variable <code>threats_found=0</code> in do_scan, and each detector increments it directly. Don't capture output.</p>
+<div class="highlight"><pre><span></span><code><span class="k">function</span><span class="w"> </span>do_scan<span class="o">()</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="nv">threats_found</span><span class="o">=</span><span class="m">0</span><span class="w">  </span><span class="c1"># global, incremented by detectors</span>
+<span class="w">    </span><span class="c1"># ... detect calls ...</span>
+<span class="w">    </span>detect_git_anomalies<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$dir</span><span class="s2">&quot;</span>
+<span class="w">    </span>detect_webroot_injections<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$dir</span><span class="s2">&quot;</span>
+<span class="w">    </span><span class="c1"># etc.</span>
+<span class="o">}</span>
+</code></pre></div>
+<h3 id="task-7-implement-do_install">Task 7: Implement do_install()<a class="headerlink" href="#task-7-implement-do_install" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nt">ADD do_install() function</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Check running as root (or with sudo)</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create /opt/forge-guardian/ and quarantine dir</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Copy script to /opt/forge-guardian/forge-guardian.sh</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">chmod +x</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create /var/log/forge-guardian.log</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">Set up cron job (idempotent)</span><span class="p">:</span><span class="w"> </span><span class="err">*</span><span class="l l-Scalar l-Scalar-Plain">/N * * * * forge-guardian.sh scan --mode &lt;mode&gt;</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Set up logrotate config</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run initial dry-run scan</span>
+</code></pre></div>
+<p><strong>Pseudocode:</strong>
+<div class="highlight"><pre><span></span><code><span class="k">function</span><span class="w"> </span>do_install<span class="o">()</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="c1"># Check if we can write to /opt</span>
+<span class="w">    </span><span class="o">[[</span><span class="w"> </span>!<span class="w"> </span>-w<span class="w"> </span>/opt<span class="w"> </span><span class="o">]]</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>IO:die<span class="w"> </span><span class="s2">&quot;Need root/sudo to install to /opt/forge-guardian/&quot;</span>
+
+<span class="w">    </span><span class="nb">local</span><span class="w"> </span><span class="nv">install_dir</span><span class="o">=</span><span class="s2">&quot;/opt/forge-guardian&quot;</span>
+<span class="w">    </span>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">install_dir</span><span class="si">}</span><span class="s2">/quarantine&quot;</span>
+
+<span class="w">    </span><span class="c1"># Copy self</span>
+<span class="w">    </span>cp<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$script_install_path</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">install_dir</span><span class="si">}</span><span class="s2">/forge-guardian.sh&quot;</span>
+<span class="w">    </span>chmod<span class="w"> </span>+x<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">install_dir</span><span class="si">}</span><span class="s2">/forge-guardian.sh&quot;</span>
+
+<span class="w">    </span><span class="c1"># Copy .env if exists</span>
+<span class="w">    </span><span class="o">[[</span><span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$script_install_folder</span><span class="s2">/.env&quot;</span><span class="w"> </span><span class="o">]]</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>cp<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$script_install_folder</span><span class="s2">/.env&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">install_dir</span><span class="si">}</span><span class="s2">/.env&quot;</span>
+
+<span class="w">    </span><span class="c1"># Create log</span>
+<span class="w">    </span>touch<span class="w"> </span>/var/log/forge-guardian.log
+
+<span class="w">    </span><span class="c1"># Cron job (idempotent)</span>
+<span class="w">    </span><span class="nb">local</span><span class="w"> </span><span class="nv">cron_cmd</span><span class="o">=</span><span class="s2">&quot;*/</span><span class="si">${</span><span class="nv">interval</span><span class="si">}</span><span class="s2"> * * * * </span><span class="si">${</span><span class="nv">install_dir</span><span class="si">}</span><span class="s2">/forge-guardian.sh scan --mode </span><span class="si">${</span><span class="nv">mode</span><span class="si">}</span><span class="s2"> &gt;&gt; /var/log/forge-guardian.log 2&gt;&amp;1&quot;</span>
+<span class="w">    </span><span class="o">(</span>crontab<span class="w"> </span>-l<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-v<span class="w"> </span><span class="s1">&#39;forge-guardian&#39;</span><span class="w"> </span><span class="o">||</span><span class="w"> </span>true<span class="p">;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$cron_cmd</span><span class="s2">&quot;</span><span class="o">)</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>crontab<span class="w"> </span>-
+<span class="w">    </span>IO:success<span class="w"> </span><span class="s2">&quot;Cron job installed: every </span><span class="si">${</span><span class="nv">interval</span><span class="si">}</span><span class="s2"> minutes&quot;</span>
+
+<span class="w">    </span><span class="c1"># Logrotate</span>
+<span class="w">    </span>cat<span class="w"> </span>&gt;<span class="w"> </span>/etc/logrotate.d/forge-guardian<span class="w"> </span><span class="s">&lt;&lt; &#39;LOGROTATE&#39;</span>
+<span class="s">/var/log/forge-guardian.log {</span>
+<span class="s">    weekly</span>
+<span class="s">    rotate 12</span>
+<span class="s">    compress</span>
+<span class="s">    missingok</span>
+<span class="s">    notifempty</span>
+<span class="s">}</span>
+<span class="s">LOGROTATE</span>
+<span class="w">    </span>IO:success<span class="w"> </span><span class="s2">&quot;Logrotate configured&quot;</span>
+
+<span class="w">    </span>IO:success<span class="w"> </span><span class="s2">&quot;Forge Guardian installed to </span><span class="si">${</span><span class="nv">install_dir</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="w">    </span>IO:print<span class="w"> </span><span class="s2">&quot;Running initial scan (dry-run)...&quot;</span>
+<span class="w">    </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">install_dir</span><span class="si">}</span><span class="s2">/forge-guardian.sh&quot;</span><span class="w"> </span>scan<span class="w"> </span>--mode<span class="w"> </span>dryrun<span class="w"> </span>-V<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">true</span>
+<span class="o">}</span>
+</code></pre></div></p>
+<h3 id="task-8-implement-do_deploy">Task 8: Implement do_deploy()<a class="headerlink" href="#task-8-implement-do_deploy" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nt">ADD do_deploy() function</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Collect servers from ${server[@]} array and --servers file</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Validate at least 1 server specified</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">For each server</span><span class="p">:</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">1. Test SSH connection</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">2. SCP forge-guardian.sh to remote /opt/forge-guardian/</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">3. SCP .env if exists</span>
+<span class="w">    </span><span class="nt">4. SSH</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">run forge-guardian.sh install remotely</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Report success/failure count</span>
+
+<span class="l l-Scalar l-Scalar-Plain">ADD ssh_cmd() helper - SSH with configured user/key/port</span>
+<span class="l l-Scalar l-Scalar-Plain">ADD scp_cmd() helper - SCP with configured user/key/port</span>
+</code></pre></div>
+<p><strong>Pseudocode:</strong>
+<div class="highlight"><pre><span></span><code><span class="k">function</span><span class="w"> </span>ssh_cmd<span class="o">()</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="nb">local</span><span class="w"> </span><span class="nv">srv</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$1</span><span class="s2">&quot;</span><span class="p">;</span><span class="w"> </span><span class="nb">shift</span>
+<span class="w">    </span>ssh<span class="w"> </span>-o<span class="w"> </span><span class="nv">StrictHostKeyChecking</span><span class="o">=</span>accept-new<span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>-o<span class="w"> </span><span class="nv">ConnectTimeout</span><span class="o">=</span><span class="m">10</span><span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>-i<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$key</span><span class="s2">&quot;</span><span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$port</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">        </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">user</span><span class="si">}</span><span class="s2">@</span><span class="si">${</span><span class="nv">srv</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$@</span><span class="s2">&quot;</span>
+<span class="o">}</span>
+
+<span class="k">function</span><span class="w"> </span>scp_cmd<span class="o">()</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="nb">local</span><span class="w"> </span><span class="nv">src</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$1</span><span class="s2">&quot;</span><span class="w"> </span><span class="nv">srv</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$2</span><span class="s2">&quot;</span><span class="w"> </span><span class="nv">dest</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$3</span><span class="s2">&quot;</span>
+<span class="w">    </span>scp<span class="w"> </span>-o<span class="w"> </span><span class="nv">StrictHostKeyChecking</span><span class="o">=</span>accept-new<span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>-o<span class="w"> </span><span class="nv">ConnectTimeout</span><span class="o">=</span><span class="m">10</span><span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>-i<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$key</span><span class="s2">&quot;</span><span class="w"> </span>-P<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$port</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">        </span><span class="s2">&quot;</span><span class="nv">$src</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">user</span><span class="si">}</span><span class="s2">@</span><span class="si">${</span><span class="nv">srv</span><span class="si">}</span><span class="s2">:</span><span class="si">${</span><span class="nv">dest</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="o">}</span>
+
+<span class="k">function</span><span class="w"> </span>do_deploy<span class="o">()</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span>Os:require<span class="w"> </span><span class="s2">&quot;ssh&quot;</span>
+<span class="w">    </span>Os:require<span class="w"> </span><span class="s2">&quot;scp&quot;</span>
+
+<span class="w">    </span><span class="c1"># Collect servers</span>
+<span class="w">    </span><span class="nb">local</span><span class="w"> </span>-a<span class="w"> </span><span class="nv">all_servers</span><span class="o">=(</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">server</span><span class="p">[@]</span><span class="si">}</span><span class="s2">&quot;</span><span class="o">)</span>
+
+<span class="w">    </span><span class="c1"># Add servers from file</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="o">[[</span><span class="w"> </span>-n<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">servers</span><span class="k">:-</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">        </span><span class="o">[[</span><span class="w"> </span>!<span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$servers</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]]</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>IO:die<span class="w"> </span><span class="s2">&quot;Servers file not found: </span><span class="nv">$servers</span><span class="s2">&quot;</span>
+<span class="w">        </span><span class="k">while</span><span class="w"> </span><span class="nv">IFS</span><span class="o">=</span><span class="w"> </span><span class="nb">read</span><span class="w"> </span>-r<span class="w"> </span>line<span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">            </span><span class="nv">line</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$line</span><span class="s2">&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sed<span class="w"> </span><span class="s1">&#39;s/#.*//&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>xargs<span class="k">)</span>
+<span class="w">            </span><span class="o">[[</span><span class="w"> </span>-n<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$line</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]]</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nv">all_servers</span><span class="o">+=(</span><span class="s2">&quot;</span><span class="nv">$line</span><span class="s2">&quot;</span><span class="o">)</span>
+<span class="w">        </span><span class="k">done</span><span class="w"> </span>&lt;<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$servers</span><span class="s2">&quot;</span>
+<span class="w">    </span><span class="k">fi</span>
+
+<span class="w">    </span><span class="o">[[</span><span class="w"> </span><span class="si">${#</span><span class="nv">all_servers</span><span class="p">[@]</span><span class="si">}</span><span class="w"> </span>-eq<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]]</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>IO:die<span class="w"> </span><span class="s2">&quot;No servers specified. Use -s &lt;host&gt; or --servers &lt;file&gt;&quot;</span>
+
+<span class="w">    </span>IO:print<span class="w"> </span><span class="s2">&quot;Deploying to </span><span class="si">${#</span><span class="nv">all_servers</span><span class="p">[@]</span><span class="si">}</span><span class="s2"> server(s)&quot;</span>
+
+<span class="w">    </span><span class="nb">local</span><span class="w"> </span><span class="nv">succeeded</span><span class="o">=</span><span class="m">0</span><span class="w"> </span><span class="nv">failed</span><span class="o">=</span><span class="m">0</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span>srv<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">all_servers</span><span class="p">[@]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">        </span>IO:announce<span class="w"> </span><span class="s2">&quot;Deploying to </span><span class="si">${</span><span class="nv">user</span><span class="si">}</span><span class="s2">@</span><span class="si">${</span><span class="nv">srv</span><span class="si">}</span><span class="s2">:</span><span class="si">${</span><span class="nv">port</span><span class="si">}</span><span class="s2">&quot;</span>
+
+<span class="w">        </span><span class="c1"># Test connection</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span>!<span class="w"> </span>ssh_cmd<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$srv</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;echo OK&quot;</span><span class="w"> </span><span class="p">&amp;</span>&gt;/dev/null<span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">            </span>IO:alert<span class="w"> </span><span class="s2">&quot;Cannot SSH to </span><span class="nv">$srv</span><span class="s2">&quot;</span>
+<span class="w">            </span><span class="o">((</span>failed++<span class="o">))</span>
+<span class="w">            </span><span class="k">continue</span>
+<span class="w">        </span><span class="k">fi</span>
+<span class="w">        </span>IO:debug<span class="w"> </span><span class="s2">&quot;SSH connection OK&quot;</span>
+
+<span class="w">        </span><span class="c1"># Upload</span>
+<span class="w">        </span>ssh_cmd<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$srv</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;mkdir -p /opt/forge-guardian&quot;</span>
+<span class="w">        </span>scp_cmd<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$script_install_path</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$srv</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;/opt/forge-guardian/forge-guardian.sh&quot;</span>
+
+<span class="w">        </span><span class="c1"># Upload .env if exists</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="o">[[</span><span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$script_install_folder</span><span class="s2">/.env&quot;</span><span class="w"> </span><span class="o">]]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">            </span>scp_cmd<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$script_install_folder</span><span class="s2">/.env&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$srv</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;/opt/forge-guardian/.env&quot;</span>
+<span class="w">        </span><span class="k">fi</span>
+
+<span class="w">        </span><span class="c1"># Remote install</span>
+<span class="w">        </span>ssh_cmd<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$srv</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;/opt/forge-guardian/forge-guardian.sh install --mode </span><span class="si">${</span><span class="nv">mode</span><span class="si">}</span><span class="s2"> --interval </span><span class="si">${</span><span class="nv">interval</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="w">        </span>IO:success<span class="w"> </span><span class="s2">&quot;Deployed to </span><span class="nv">$srv</span><span class="s2">&quot;</span>
+<span class="w">        </span><span class="o">((</span>succeeded++<span class="o">))</span>
+<span class="w">    </span><span class="k">done</span>
+
+<span class="w">    </span>IO:print<span class="w"> </span><span class="s2">&quot;Done: </span><span class="si">${</span><span class="nv">succeeded</span><span class="si">}</span><span class="s2"> succeeded, </span><span class="si">${</span><span class="nv">failed</span><span class="si">}</span><span class="s2"> failed&quot;</span>
+<span class="w">    </span><span class="o">[[</span><span class="w"> </span><span class="nv">$failed</span><span class="w"> </span>-eq<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]]</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="m">1</span>
+<span class="o">}</span>
+</code></pre></div></p>
+<h3 id="task-9-implement-do_uninstall">Task 9: Implement do_uninstall()<a class="headerlink" href="#task-9-implement-do_uninstall" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nt">ADD do_uninstall() function</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Remove cron entry</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Remove script (preserve quarantine if non-empty)</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Remove logrotate config</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Preserve log file</span>
+</code></pre></div>
+<p><strong>Pseudocode:</strong>
+<div class="highlight"><pre><span></span><code><span class="k">function</span><span class="w"> </span>do_uninstall<span class="o">()</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span>IO:print<span class="w"> </span><span class="s2">&quot;Uninstalling Forge Guardian...&quot;</span>
+
+<span class="w">    </span><span class="c1"># Remove cron</span>
+<span class="w">    </span><span class="o">(</span>crontab<span class="w"> </span>-l<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-v<span class="w"> </span><span class="s1">&#39;forge-guardian&#39;</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">true</span><span class="o">)</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>crontab<span class="w"> </span>-
+<span class="w">    </span>IO:success<span class="w"> </span><span class="s2">&quot;Cron entry removed&quot;</span>
+
+<span class="w">    </span><span class="c1"># Remove files (preserve quarantine)</span>
+<span class="w">    </span><span class="nb">local</span><span class="w"> </span><span class="nv">install_dir</span><span class="o">=</span><span class="s2">&quot;/opt/forge-guardian&quot;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="o">[[</span><span class="w"> </span>-d<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">install_dir</span><span class="si">}</span><span class="s2">/quarantine&quot;</span><span class="w"> </span><span class="o">]]</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">[[</span><span class="w"> </span>-n<span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>ls<span class="w"> </span>-A<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">install_dir</span><span class="si">}</span><span class="s2">/quarantine&quot;</span><span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="k">)</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">        </span>IO:alert<span class="w"> </span><span class="s2">&quot;Preserving quarantine directory: </span><span class="si">${</span><span class="nv">install_dir</span><span class="si">}</span><span class="s2">/quarantine/&quot;</span>
+<span class="w">        </span>rm<span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">install_dir</span><span class="si">}</span><span class="s2">/forge-guardian.sh&quot;</span>
+<span class="w">        </span>rm<span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">install_dir</span><span class="si">}</span><span class="s2">/.env&quot;</span>
+<span class="w">    </span><span class="k">else</span>
+<span class="w">        </span>rm<span class="w"> </span>-rf<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">install_dir</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="w">    </span><span class="k">fi</span>
+
+<span class="w">    </span>rm<span class="w"> </span>-f<span class="w"> </span>/etc/logrotate.d/forge-guardian
+<span class="w">    </span>IO:success<span class="w"> </span><span class="s2">&quot;Forge Guardian uninstalled&quot;</span>
+<span class="w">    </span>IO:print<span class="w"> </span><span class="s2">&quot;Log file preserved: /var/log/forge-guardian.log&quot;</span>
+<span class="o">}</span>
+</code></pre></div></p>
+<h3 id="task-10-update-envexample">Task 10: Update .env.example<a class="headerlink" href="#task-10-update-envexample" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nt">MODIFY .env.example</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Add all notification webhook variables</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Add scan mode and interval defaults</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Add SSH deploy defaults</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Add quarantine directory</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Add comments explaining each variable</span>
+</code></pre></div>
+<hr />
+<h2 id="integration-points">Integration Points<a class="headerlink" href="#integration-points" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nt">CRON</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">install verb creates</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;*/5</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">/opt/forge-guardian/forge-guardian.sh</span><span class="nv"> </span><span class="s">scan</span><span class="nv"> </span><span class="s">--mode</span><span class="nv"> </span><span class="s">detect</span><span class="nv"> </span><span class="s">&gt;&gt;</span><span class="nv"> </span><span class="s">/var/log/forge-guardian.log</span><span class="nv"> </span><span class="s">2&gt;&amp;1&quot;</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">interval configurable via --interval option</span>
+
+<span class="nt">LOGROTATE</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">install verb creates</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/etc/logrotate.d/forge-guardian</span>
+
+<span class="nt">SSH/SCP</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">deploy verb uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ssh -i $key -p $port $user@$server</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">deploy verb uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">scp -i $key -P $port</span>
+
+<span class="nt">ENV</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bashew auto-loads .env files (script folder + cwd)</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">notification config in .env overridden by CLI flags</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">deployed .env is copied to /opt/forge-guardian/.env on remote</span>
+
+<span class="nt">FILESYSTEM</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/opt/forge-guardian/forge-guardian.sh     (installed script)</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/opt/forge-guardian/.env                  (config)</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/opt/forge-guardian/quarantine/           (quarantined files)</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/var/log/forge-guardian.log              (log output)</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/etc/logrotate.d/forge-guardian          (log rotation config)</span>
+</code></pre></div>
+<hr />
+<h2 id="validation-loop">Validation Loop<a class="headerlink" href="#validation-loop" title="Permanent link">&para;</a></h2>
+<h3 id="level-1-syntax-static-analysis">Level 1: Syntax &amp; Static Analysis<a class="headerlink" href="#level-1-syntax-static-analysis" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="c1"># Syntax check</span>
+bash<span class="w"> </span>-n<span class="w"> </span>forge-guardian.sh
+
+<span class="c1"># ShellCheck (fix all warnings, add SC directives where needed)</span>
+shellcheck<span class="w"> </span>forge-guardian.sh
+
+<span class="c1"># Expected: No errors</span>
+</code></pre></div>
+<h3 id="level-2-functional-tests">Level 2: Functional Tests<a class="headerlink" href="#level-2-functional-tests" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="c1"># Test help output</span>
+./forge-guardian.sh<span class="w"> </span>-h
+
+<span class="c1"># Test check verb (shows all config values)</span>
+./forge-guardian.sh<span class="w"> </span>check
+
+<span class="c1"># Test env verb (generates .env template)</span>
+./forge-guardian.sh<span class="w"> </span>env<span class="w"> </span>&gt;<span class="w"> </span>/tmp/test.env
+
+<span class="c1"># Test scan verb fails gracefully when not on a Forge server</span>
+./forge-guardian.sh<span class="w"> </span>scan<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Expected: no projects found&quot;</span>
+
+<span class="c1"># Test deploy verb fails gracefully with no servers</span>
+./forge-guardian.sh<span class="w"> </span>deploy<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Expected: no servers specified&quot;</span>
+
+<span class="c1"># Test unknown action</span>
+./forge-guardian.sh<span class="w"> </span>badaction<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Expected: action not recognized&quot;</span>
+</code></pre></div>
+<h3 id="level-3-integration-verification">Level 3: Integration Verification<a class="headerlink" href="#level-3-integration-verification" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="c1"># Verify all verbs are listed in help</span>
+./forge-guardian.sh<span class="w"> </span>-h<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s2">&quot;scan|install|deploy|uninstall&quot;</span>
+
+<span class="c1"># Verify .env loading works</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;slack=&quot;https://test&quot;&#39;</span><span class="w"> </span>&gt;<span class="w"> </span>/tmp/test.env
+<span class="c1"># (would need to test with actual .env in script folder)</span>
+
+<span class="c1"># Verify script can be sourced without executing (bashew feature)</span>
+<span class="nb">source</span><span class="w"> </span>forge-guardian.sh<span class="w">  </span><span class="c1"># should not execute Script:main</span>
+</code></pre></div>
+<hr />
+<h2 id="final-validation-checklist">Final Validation Checklist<a class="headerlink" href="#final-validation-checklist" title="Permanent link">&para;</a></h2>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>bash -n forge-guardian.sh</code> passes (syntax check)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>shellcheck forge-guardian.sh</code> passes (or only acceptable SC directives)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>./forge-guardian.sh -h</code> shows all verbs and options</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>./forge-guardian.sh check</code> shows all config values</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>./forge-guardian.sh scan</code> runs (fails gracefully if no $root/)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>./forge-guardian.sh deploy</code> fails with helpful error when no servers given</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> All 5 detectors from original are ported (git anomalies, webroot, recent changes, crons, permissions)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> All malicious signatures from original are included</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> All suspicious filename patterns from original are included</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Notification functions support Slack, Discord, Telegram, Email</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> .env.example documents all configurable variables</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> No code modified below "DO NOT MODIFY BELOW THIS LINE" (line 172)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> TIP comments added for each verb</li>
+</ul>
+<hr />
+<h2 id="anti-patterns-to-avoid">Anti-Patterns to Avoid<a class="headerlink" href="#anti-patterns-to-avoid" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Do NOT modify bashew framework code below line 172</li>
+<li>Do NOT hardcode project directories — always auto-detect via <code>find</code></li>
+<li>Do NOT use <code>echo</code> for output — use <code>IO:print</code>, <code>IO:alert</code>, <code>IO:debug</code>, <code>IO:success</code></li>
+<li>Do NOT use <code>exit</code> directly — use <code>IO:die</code> or <code>return</code></li>
+<li>Do NOT use <code>$DRY_RUN</code> / <code>$AUTO_HEAL</code> booleans — use <code>$mode</code> (detect/heal/dryrun)</li>
+<li>Do NOT create separate scripts — everything goes in the single forge-guardian.sh</li>
+<li>Do NOT use backticks — use <code>$(command)</code> substitution</li>
+<li>Do NOT use unquoted variables — always <code>"${var}"</code></li>
+<li>Do NOT skip the <code># shellcheck disable=SCXXXX</code> directives where needed</li>
+<li>Do NOT forget that <code>IFS=$'\n\t'</code> is set (bashew strict mode) — word splitting works differently</li>
+</ul>
+<hr />
+<h2 id="confidence-score-810">Confidence Score: 8/10<a class="headerlink" href="#confidence-score-810" title="Permanent link">&para;</a></h2>
+<p><strong>Why 8 and not higher:</strong>
+- The scan detectors are well-documented in the original and straightforward to port
+- The bashew framework provides solid scaffolding
+- The <code>list</code> type for servers and .env for config are clean patterns
+- Risk areas: grep -P compatibility (macOS vs Linux), stat command differences, the IFS setting affecting array iteration in detection loops
+- The deploy verb has SSH complexity but follows a clear pattern from the original</p>
+<p><strong>What could improve confidence:</strong>
+- Having a test server to validate SSH deploy
+- More specific tests for the detection functions
+- Handling edge cases around the <code>find $root</code> path on non-Forge systems</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      &copy; 2026 forge-guardian Docs &bull; pforret
+    </div>
+  
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["content.code.copy", "header.autohide", "navigation.instant", "navigation.integrate", "navigation.tabs", "navigation.tabs.sticky", "navigation.tracking", "search.highlight", "search.suggest"], "search": "../../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.88dd0f4e.min.js"></script>
+      
+    
+  </body>
+</html>
