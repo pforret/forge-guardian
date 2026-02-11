@@ -112,10 +112,10 @@ function Script:main() {
     ;;
 
   deploy)
-    #TIP: use «$script_prefix deploy -s <server>» to deploy to remote servers via SSH
+    #TIP: use «$script_prefix deploy -s <server>» to deploy via git clone to remote servers
     #TIP:> $script_prefix deploy -s 142.93.1.100 -s 167.99.2.200
-    #TIP: use «$script_prefix deploy --servers <file>» to deploy from a server list file
-    #TIP:> $script_prefix deploy --servers servers.txt
+    #TIP: use «$script_prefix deploy --SERVERLIST <file>» to deploy from a server list file
+    #TIP:> $script_prefix deploy --SERVERLIST servers.txt
     do_deploy
     ;;
 
@@ -136,7 +136,9 @@ function Script:main() {
   update)
     #TIP: use «$script_prefix update» to update to the latest version
     #TIP:> $script_prefix update
-    Script:git_pull
+    #TIP: use «$script_prefix update -s <server>» to update remote servers via SSH
+    #TIP:> $script_prefix update -s 142.93.1.100 -s 167.99.2.200
+    do_update
     ;;
 
   *)
@@ -184,6 +186,7 @@ FG_SUSPICIOUS_PATTERNS=(
   'xmlrpc\.php'
   '\.php\.suspected'
   'adminer\.php'
+  '^[a-f0-9]{6,}\.php$'
 )
 
 # Suspicious code signatures (grep -P patterns to find in file content)
@@ -445,6 +448,32 @@ function detect_recent_changes() {
   done < <(find "$project_dir" -name "*.php" -mmin -10 -type f -print0 2>/dev/null)
 }
 
+function detect_storage_php() {
+  local project_dir="$1"
+  local storage_dir="${project_dir}/storage"
+  IO:debug "Scanning storage for PHP files: $storage_dir"
+
+  [[ ! -d "$storage_dir" ]] && return
+
+  while IFS= read -r -d '' file; do
+    local relative="${file#"$project_dir"/}"
+
+    # views are compiled blade templates — those are normal
+    [[ "$relative" == storage/framework/views/* ]] && continue
+
+    IO:alert "PHP FILE IN STORAGE: $relative"
+    threats_found=$((threats_found + 1))
+
+    if scan_file_content "$file"; then
+      IO:alert "MALICIOUS FILE IN STORAGE: $relative"
+    fi
+
+    if [[ "$MODE" == "heal" || "$MODE" == "dryrun" ]]; then
+      remove_untracked "$file" "$project_dir"
+    fi
+  done < <(find "$storage_dir" -name "*.php" -not -path "*/framework/views/*" -type f -print0 2>/dev/null)
+}
+
 function detect_suspicious_crons() {
   IO:debug "Checking cron jobs for forge user"
 
@@ -456,6 +485,7 @@ function detect_suspicious_crons() {
     return
   fi
 
+  local malicious_found=0
   local line
   while IFS= read -r line; do
     [[ -z "$line" ]] && continue
@@ -465,11 +495,95 @@ function detect_suspicious_crons() {
     [[ "$line" =~ "artisan schedule:run" ]] && continue
     [[ "$line" =~ "forge-guardian" ]] && continue
 
+    local is_bad=false
+
+    # Check for known bad commands
     if echo "$line" | grep -qPi '(curl|wget|python|perl|nc |ncat|bash -i|\/dev\/tcp)' 2>/dev/null; then
+      is_bad=true
+    fi
+
+    # Check for references to temp/hidden directories
+    if echo "$line" | grep -qPi '(\/var\/tmp|\/dev\/shm|\/tmp\/)' 2>/dev/null; then
+      is_bad=true
+    fi
+
+    if $is_bad; then
       IO:alert "SUSPICIOUS CRON: $line"
       threats_found=$((threats_found + 1))
+      malicious_found=$((malicious_found + 1))
     fi
   done <<< "$crontab_content"
+
+  # In heal mode, remove entire forge crontab if malicious entries found
+  if ((malicious_found > 0)); then
+    if [[ "$MODE" == "heal" ]]; then
+      IO:alert "Removing compromised forge crontab ($malicious_found malicious entries)"
+      crontab -r -u forge 2>/dev/null || true
+      IO:success "Forge crontab removed"
+    elif [[ "$MODE" == "dryrun" ]]; then
+      IO:print "[DRY-RUN] Would remove forge crontab ($malicious_found malicious entries)"
+    fi
+  fi
+}
+
+function detect_suspicious_processes() {
+  IO:debug "Checking for suspicious processes"
+
+  local -a suspect_patterns=(
+    '/var/tmp/'
+    '/dev/shm/'
+    '/tmp/.*\.(pl|py|sh)$'
+    'perl.*(/tmp/|/var/tmp/|/dev/shm/)'
+    'python.*(/tmp/|/var/tmp/|/dev/shm/)'
+  )
+
+  local pattern
+  for pattern in "${suspect_patterns[@]}"; do
+    local pids
+    pids=$(pgrep -f "$pattern" 2>/dev/null || true)
+    [[ -z "$pids" ]] && continue
+
+    local pid
+    while IFS= read -r pid; do
+      [[ -z "$pid" ]] && continue
+      local cmdline
+      cmdline=$(ps -p "$pid" -o args= 2>/dev/null || true)
+      [[ -z "$cmdline" ]] && continue
+
+      IO:alert "SUSPICIOUS PROCESS [PID $pid]: $cmdline"
+      threats_found=$((threats_found + 1))
+
+      if [[ "$MODE" == "heal" ]]; then
+        kill "$pid" 2>/dev/null || true
+        IO:alert "Killed process $pid"
+      elif [[ "$MODE" == "dryrun" ]]; then
+        IO:print "[DRY-RUN] Would kill process $pid"
+      fi
+    done <<< "$pids"
+  done
+}
+
+function clean_temp_directories() {
+  IO:debug "Checking temp directories for forge-owned files"
+
+  local -a temp_dirs=(/var/tmp /dev/shm)
+  local dir
+
+  for dir in "${temp_dirs[@]}"; do
+    [[ ! -d "$dir" ]] && continue
+
+    while IFS= read -r -d '' file; do
+      IO:alert "FORGE-OWNED FILE IN $dir: $file"
+      threats_found=$((threats_found + 1))
+
+      if [[ "$MODE" == "heal" ]]; then
+        rm -f "$file"
+        IO:alert "Removed: $file"
+      elif [[ "$MODE" == "dryrun" ]]; then
+        IO:print "[DRY-RUN] Would remove: $file"
+      fi
+    done < <(find "$dir" -type f -user forge -print0 2>/dev/null)
+  done
 }
 
 function detect_bad_permissions() {
@@ -593,12 +707,15 @@ function do_scan() {
     IO:print "---"
     detect_git_anomalies "$dir"
     detect_webroot_injections "$dir"
+    detect_storage_php "$dir"
     detect_recent_changes "$dir"
     detect_bad_permissions "$dir"
   done
 
-  # Cron check is system-wide
+  # System-wide checks (not per-project)
   detect_suspicious_crons
+  detect_suspicious_processes
+  clean_temp_directories
 
   IO:print ""
   if ((threats_found > 0)); then
@@ -636,9 +753,9 @@ function do_scan_remote() {
       continue
     fi
 
-    # Check if forge-guardian is installed
+    # Check if forge-guardian is installed (git-managed)
     if ! ssh_cmd "$srv" "sudo test -x /opt/forge-guardian/forge-guardian.sh" &>/dev/null; then
-      IO:alert "Forge Guardian not installed on $srv — run 'deploy' first"
+      IO:alert "Forge Guardian not installed on $srv — run 'deploy -s $srv' first"
       servers_unreachable=$((servers_unreachable + 1))
       continue
     fi
@@ -689,20 +806,55 @@ function do_install() {
 
   # --- Local install ---
   local install_dir="/opt/forge-guardian"
+  local repo_url="https://github.com/pforret/forge-guardian.git"
 
   [[ ! -w /opt ]] && IO:die "Need root/sudo to install to ${install_dir}/"
 
+  Os:require "git"
+
+  if [[ -d "${install_dir}/.git" ]]; then
+    # Already a git clone — pull latest
+    IO:print "Updating existing installation via git pull..."
+    git -C "${install_dir}" pull
+    IO:success "Updated ${install_dir} from git"
+  else
+    # Fresh install — remove old non-git install if present, then clone
+    if [[ -d "${install_dir}" ]]; then
+      # Preserve quarantine and .env before removing old install
+      local had_env=false
+      if [[ -f "${install_dir}/.env" ]]; then
+        cp "${install_dir}/.env" "/tmp/forge-guardian-env-backup"
+        had_env=true
+      fi
+      if [[ -d "${install_dir}/quarantine" ]] && [[ -n "$(ls -A "${install_dir}/quarantine" 2>/dev/null)" ]]; then
+        IO:alert "Preserving existing quarantine directory"
+        mv "${install_dir}/quarantine" "/tmp/forge-guardian-quarantine-backup"
+      fi
+      rm -rf "${install_dir}"
+    fi
+
+    IO:print "Cloning ${repo_url} to ${install_dir}..."
+    git clone "$repo_url" "${install_dir}"
+    IO:success "Cloned forge-guardian to ${install_dir}"
+
+    # Restore preserved data
+    if [[ "${had_env:-false}" == "true" ]] && [[ -f "/tmp/forge-guardian-env-backup" ]]; then
+      mv "/tmp/forge-guardian-env-backup" "${install_dir}/.env"
+      IO:debug "Restored .env from backup"
+    fi
+    if [[ -d "/tmp/forge-guardian-quarantine-backup" ]]; then
+      mv "/tmp/forge-guardian-quarantine-backup" "${install_dir}/quarantine"
+      IO:debug "Restored quarantine from backup"
+    fi
+  fi
+
   mkdir -p "${install_dir}/quarantine"
-
-  # Copy self
-  cp "$script_install_path" "${install_dir}/forge-guardian.sh"
   chmod +x "${install_dir}/forge-guardian.sh"
-  IO:success "Script installed to ${install_dir}/forge-guardian.sh"
 
-  # Copy .env if exists
-  if [[ -f "${script_install_folder}/.env" ]]; then
+  # Copy .env from source if it exists and install dir doesn't have one yet
+  if [[ ! -f "${install_dir}/.env" ]] && [[ -f "${script_install_folder}/.env" ]]; then
     cp "${script_install_folder}/.env" "${install_dir}/.env"
-    IO:debug ".env copied"
+    IO:debug ".env copied from source"
   fi
 
   # Create log
@@ -730,7 +882,8 @@ LOGROTATE
     IO:debug "Cannot write to /etc/logrotate.d, skipping logrotate"
   fi
 
-  IO:success "Forge Guardian installed to ${install_dir}"
+  IO:success "Forge Guardian installed to ${install_dir} (git-managed)"
+  IO:print "  Update later with: cd ${install_dir} && git pull"
   IO:print ""
   IO:print "Running initial scan (dry-run)..."
   "${install_dir}/forge-guardian.sh" --MODE dryrun -V scan || true
@@ -738,17 +891,16 @@ LOGROTATE
 
 function do_install_remote() {
   Os:require "ssh"
-  Os:require "scp"
   local -a servers_list=("$@")
+  local repo_url="https://github.com/pforret/forge-guardian.git"
+  local install_dir="/opt/forge-guardian"
 
-  IO:print "Remote install to ${#servers_list[@]} server(s)"
+  IO:print "Remote deploy to ${#servers_list[@]} server(s) via git clone"
   IO:print ""
 
   local srv
   local succeeded=0
   local failed=0
-
-  local install_cmd="sudo bash -c 'mkdir -p /opt/forge-guardian && mv /tmp/forge-guardian/* /opt/forge-guardian/ && chmod +x /opt/forge-guardian/forge-guardian.sh && /opt/forge-guardian/forge-guardian.sh --MODE ${MODE} --INTERVAL ${INTERVAL} install'"
 
   for srv in "${servers_list[@]}"; do
     IO:announce "Deploying to ${srv}"
@@ -761,42 +913,50 @@ function do_install_remote() {
     fi
     IO:debug "SSH connection OK"
 
-    # Prepare staging dir on remote
-    if ! ssh_cmd "$srv" "rm -rf /tmp/forge-guardian && mkdir -p /tmp/forge-guardian"; then
-      IO:alert "Cannot create /tmp/forge-guardian on $srv"
+    # Check if git is available on remote
+    if ! ssh_cmd "$srv" "command -v git" &>/dev/null; then
+      IO:alert "git not found on $srv — install git first"
       failed=$((failed + 1))
       continue
     fi
+    IO:debug "git available on remote"
 
-    # Upload script
-    if ! scp_cmd "$script_install_path" "$srv" "/tmp/forge-guardian/forge-guardian.sh"; then
-      IO:alert "Failed to upload script to $srv"
-      failed=$((failed + 1))
-      continue
-    fi
-    IO:debug "Script uploaded"
-
-    # Upload .env if exists
+    # Upload .env to temp location if it exists locally
     if [[ -f "${script_install_folder}/.env" ]]; then
-      if ! scp_cmd "${script_install_folder}/.env" "$srv" "/tmp/forge-guardian/.env"; then
-        IO:alert "Failed to upload .env to $srv"
-        failed=$((failed + 1))
-        continue
+      Os:require "scp"
+      if scp_cmd "${script_install_folder}/.env" "$srv" "/tmp/forge-guardian.env"; then
+        IO:debug ".env uploaded to /tmp/forge-guardian.env"
+      else
+        IO:alert "Failed to upload .env to $srv (continuing without it)"
       fi
-      IO:debug ".env uploaded"
     fi
 
-    IO:success "Files staged in /tmp/forge-guardian/ on $srv"
+    # Build the remote install command: clone or pull, then run local install
+    local remote_cmd
+    remote_cmd="sudo bash -c '"
+    remote_cmd+="if [ -d ${install_dir}/.git ]; then "
+    remote_cmd+="  cd ${install_dir} && git pull; "
+    remote_cmd+="else "
+    remote_cmd+="  rm -rf ${install_dir} && git clone ${repo_url} ${install_dir}; "
+    remote_cmd+="fi && "
+    remote_cmd+="mkdir -p ${install_dir}/quarantine && "
+    remote_cmd+="chmod +x ${install_dir}/forge-guardian.sh && "
+    # Restore .env from temp if uploaded
+    remote_cmd+="if [ -f /tmp/forge-guardian.env ] && [ ! -f ${install_dir}/.env ]; then "
+    remote_cmd+="  mv /tmp/forge-guardian.env ${install_dir}/.env; "
+    remote_cmd+="fi && "
+    remote_cmd+="${install_dir}/forge-guardian.sh --MODE ${MODE} --INTERVAL ${INTERVAL} install"
+    remote_cmd+="'"
 
     # Try passwordless sudo first
     if ssh_cmd "$srv" "sudo -n true" &>/dev/null; then
       IO:debug "Passwordless sudo available — running install automatically"
-      if ! ssh_cmd "$srv" "$install_cmd"; then
+      if ! ssh_cmd "$srv" "$remote_cmd"; then
         IO:alert "Remote install failed on $srv"
         failed=$((failed + 1))
         continue
       fi
-      IO:success "Installed on $srv"
+      IO:success "Installed on $srv (git-managed)"
       succeeded=$((succeeded + 1))
     else
       # No passwordless sudo — open interactive session
@@ -804,7 +964,7 @@ function do_install_remote() {
       IO:print "  No passwordless sudo on $srv — opening interactive SSH session."
       IO:print "  Copy-paste this command, then type 'exit' when done:"
       IO:print ""
-      IO:print "  $install_cmd"
+      IO:print "  $remote_cmd"
       IO:print ""
       ssh -t "$srv"
       IO:confirm "Did the install on $srv succeed?" && succeeded=$((succeeded + 1)) || failed=$((failed + 1))
@@ -813,6 +973,7 @@ function do_install_remote() {
 
   IO:print ""
   IO:print "Done: ${succeeded} succeeded, ${failed} failed (of ${#servers_list[@]} total)"
+  IO:print "Future updates: $script_basename update -s <server>"
   [[ "$failed" -eq 0 ]] || return 1
 }
 
@@ -843,6 +1004,97 @@ function do_deploy() {
 }
 
 #####################################################################
+## Verb: update (git pull for local and remote)
+#####################################################################
+
+function do_update() {
+  IO:log "update"
+
+  # Collect remote servers if specified
+  local -a all_servers=()
+  if [[ ${#SERVER[@]} -gt 0 ]]; then
+    all_servers+=("${SERVER[@]}")
+  fi
+  if [[ -n "${SERVERLIST:-}" ]]; then
+    [[ ! -f "$SERVERLIST" ]] && IO:die "Servers file not found: $SERVERLIST"
+    local line
+    while IFS= read -r line; do
+      line=$(Str:trim "${line%%#*}")
+      [[ -n "$line" ]] && all_servers+=("$line")
+    done <"$SERVERLIST"
+  fi
+
+  if [[ ${#all_servers[@]} -gt 0 ]]; then
+    do_update_remote "${all_servers[@]}"
+    return $?
+  fi
+
+  # --- Local update ---
+  Os:require "git"
+  local install_dir="/opt/forge-guardian"
+
+  if [[ -d "${install_dir}/.git" ]]; then
+    IO:print "Updating ${install_dir} via git pull..."
+    if git -C "${install_dir}" pull; then
+      IO:success "Forge Guardian updated"
+    else
+      IO:die "git pull failed in ${install_dir}"
+    fi
+  elif [[ -d "${script_install_folder}/.git" ]]; then
+    IO:print "Updating ${script_install_folder} via git pull..."
+    # run in background to avoid problems with modifying a running script
+    (
+      sleep 1
+      cd "$script_install_folder" && git pull
+    ) &
+    IO:success "Update started in background"
+  else
+    IO:die "Not a git-managed installation. Reinstall with: sudo $script_basename install"
+  fi
+}
+
+function do_update_remote() {
+  Os:require "ssh"
+  local -a servers_list=("$@")
+  local install_dir="/opt/forge-guardian"
+
+  IO:print "Remote update on ${#servers_list[@]} server(s) via git pull"
+  IO:print ""
+
+  local srv
+  local succeeded=0
+  local failed=0
+
+  for srv in "${servers_list[@]}"; do
+    IO:announce "Updating ${srv}"
+
+    if ! ssh_cmd "$srv" "echo OK" &>/dev/null; then
+      IO:alert "Cannot SSH to $srv"
+      failed=$((failed + 1))
+      continue
+    fi
+
+    if ! ssh_cmd "$srv" "sudo test -d ${install_dir}/.git" &>/dev/null; then
+      IO:alert "No git-managed install on $srv — run 'deploy' first"
+      failed=$((failed + 1))
+      continue
+    fi
+
+    if ssh_cmd "$srv" "sudo git -C ${install_dir} pull" 2>&1; then
+      IO:success "Updated $srv"
+      succeeded=$((succeeded + 1))
+    else
+      IO:alert "git pull failed on $srv"
+      failed=$((failed + 1))
+    fi
+  done
+
+  IO:print ""
+  IO:print "Done: ${succeeded} updated, ${failed} failed (of ${#servers_list[@]} total)"
+  [[ "$failed" -eq 0 ]] || return 1
+}
+
+#####################################################################
 ## Verb: uninstall
 #####################################################################
 
@@ -854,12 +1106,12 @@ function do_uninstall() {
   (crontab -l 2>/dev/null | grep -v 'forge-guardian' || true) | crontab -
   IO:success "Cron entry removed"
 
-  # Remove files (preserve quarantine if it has content)
+  # Remove installation (preserve quarantine if it has content)
   local install_dir="/opt/forge-guardian"
   if [[ -d "${install_dir}/quarantine" ]] && [[ -n "$(ls -A "${install_dir}/quarantine" 2>/dev/null)" ]]; then
     IO:alert "Preserving quarantine directory: ${install_dir}/quarantine/"
-    rm -f "${install_dir}/forge-guardian.sh"
-    rm -f "${install_dir}/.env"
+    # Remove everything except quarantine
+    find "${install_dir}" -mindepth 1 -maxdepth 1 -not -name quarantine -exec rm -rf {} +
   else
     rm -rf "${install_dir}"
   fi
