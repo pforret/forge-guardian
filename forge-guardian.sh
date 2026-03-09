@@ -1146,6 +1146,10 @@ temp_files=()
 # removed -e because it made basic [[ testing ]] difficult
 set -uo pipefail
 IFS=$'\n\t'
+# ensure USER and HOSTNAME are set (may be unset in cron, Docker, etc.)
+USER="${USER:-$(whoami 2>/dev/null || echo 'unknown')}"
+HOSTNAME="${HOSTNAME:-$(hostname 2>/dev/null || echo 'unknown')}"
+export USER HOSTNAME
 FORCE=0
 help=0
 
